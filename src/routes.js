@@ -56,6 +56,7 @@ import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
 import SignOut from "./layouts/authentication/sign-out";
 import SignUp from "./layouts/authentication/sign-up";
+import Categorias from "./layouts/categorias";
 
 const routes = [
   {
@@ -84,7 +85,7 @@ const routes = [
     key: "categorias",
     route: "/categorias",
     icon: <Office size="12px" />,
-    component: <Tables />,
+    component: <Categorias />,
     noCollapse: true,
     isPrivate: true,
   }

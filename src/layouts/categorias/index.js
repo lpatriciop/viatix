@@ -1,17 +1,4 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -21,18 +8,53 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard React examples
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import Table from "examples/Tables/Table";
+import DashboardLayout from "viaticos/LayoutContainers/DashboardLayout";
+import DashboardNavbar from "viaticos/Navbars/DashboardNavbar";
+import Footer from "viaticos/Footer";
+import Table from "viaticos/Tables/Table";
+import {useHistory} from "react-router-dom";
+import {useState,useEffect} from "react";
+import {API_URL} from "../../config";
 
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
+// import authorsTableData from "layouts/tables/data/authorsTableData";
+// import projectsTableData from "layouts/tables/data/projectsTableData";
+const endpoint = API_URL+ '/categorias';
+function Categorias() {
+  // const { columns, rows } = authorsTableData;
+  // const { columns: prCols, rows: prRows } = projectsTableData;
+ const [categorias,setCategorias]=useState([]);
+ const token=localStorage.getItem("token");
+  useEffect(() => {
+    const fetchData= async ()=>
+    {
+      try {
+        const response=await fetch(endpoint, {
+          method: 'GET', // Método de la solicitud (puede ser GET, POST, PUT, DELETE, etc.)
+         // mode:'no-cors',// QUITAR PRODUCCION
+          headers: {
+                  Authorization: `Bearer ${token}`,
+          },
 
-function Tables() {
-  const { columns, rows } = authorsTableData;
-  const { columns: prCols, rows: prRows } = projectsTableData;
+        });
+        if(response.ok){
+           const data= await response.json();
+            // console.log("data ",data);
+          setCategorias(data);
+        }else {
+          console.error("Error al obtener datos respuesta",response.statusMessage);
+        }
+      }catch (error){
+        console.error("Error al obtener datos try",error);
+      }
+
+    };
+   fetchData();
+  }, []);
+  const columns=[
+     {name:'idCategoria',headerName:'id',align:'center',width:'50%'},
+     {name:'nombreCategoria', headerName:'Categoria',align:'left',width:'auto'}
+  ];
 
   return (
     <DashboardLayout>
@@ -53,31 +75,15 @@ function Tables() {
                 },
               }}
             >
-              <Table columns={columns} rows={rows} />
+              <Table columns={columns} rows={categorias} />
             </SoftBox>
           </Card>
         </SoftBox>
-        <Card>
-          <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-            <SoftTypography variant="h6">Projects table</SoftTypography>
-          </SoftBox>
-          <SoftBox
-            sx={{
-              "& .MuiTableRow-root:not(:last-child)": {
-                "& td": {
-                  borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                    `${borderWidth[1]} solid ${borderColor}`,
-                },
-              },
-            }}
-          >
-            <Table columns={prCols} rows={prRows} />
-          </SoftBox>
-        </Card>
+
       </SoftBox>
       <Footer />
     </DashboardLayout>
   );
 }
 
-export default Tables;
+export default Categorias;

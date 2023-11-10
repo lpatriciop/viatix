@@ -127,7 +127,7 @@ export default function App() {
             <Routes>
               {getRoutes(routes)}
               {/*<Route path="*" element={<Navigate to="/dashboard" />} />*/}
-                <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+                <Route path="*" element={<Navigate to="/authentication/sign-in" />} key={"sign-in"} />
             </Routes>
           </ThemeProvider>
 
