@@ -24,7 +24,7 @@ function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [error, setError] = useState("");
-//Corre
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -64,7 +64,7 @@ function SignIn() {
       }
     } catch (error) {
       // Si hay un error en la solicitud, maneja el error aquí
-      console.error('Error al enviar la solicitud:', error);
+      setError('Error al enviar la solicitud:'+ error);
     }
   };
   return (
@@ -95,37 +95,37 @@ function SignIn() {
           <SoftInput type="password" placeholder="Password"  value={password}
                      onChange={handlePasswordChange}/>
         </SoftBox>
-        <SoftBox display="flex" alignItems="center">
-          <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-          <SoftTypography
-            variant="button"
-            fontWeight="regular"
-            onClick={handleSetRememberMe}
-            sx={{ cursor: "pointer", userSelect: "none" }}
-          >
-            &nbsp;&nbsp;Remember me
-          </SoftTypography>
-        </SoftBox>
+        {/*<SoftBox display="flex" alignItems="center">*/}
+        {/*  <Switch checked={rememberMe} onChange={handleSetRememberMe} />*/}
+        {/*  <SoftTypography*/}
+        {/*    variant="button"*/}
+        {/*    fontWeight="regular"*/}
+        {/*    onClick={handleSetRememberMe}*/}
+        {/*    sx={{ cursor: "pointer", userSelect: "none" }}*/}
+        {/*  >*/}
+        {/*    &nbsp;&nbsp;Remember me*/}
+        {/*  </SoftTypography>*/}
+        {/*</SoftBox>*/}
         <SoftBox mt={4} mb={1}>
           <SoftButton variant="gradient" color="info" fullWidth onClick={handleSubmit}>
             Ingresar
           </SoftButton>
         </SoftBox>
-        <SoftBox mt={3} textAlign="center">
-          <SoftTypography variant="button" color="text" fontWeight="regular">
-            Don&apos;t have an account?{" "}
-            <SoftTypography
-              component={Link}
-              to="/authentication/sign-up"
-              variant="button"
-              color="info"
-              fontWeight="medium"
-              textGradient
-            >
-              Sign up
-            </SoftTypography>
-          </SoftTypography>
-        </SoftBox>
+        {/*<SoftBox mt={3} textAlign="center">*/}
+        {/*  <SoftTypography variant="button" color="text" fontWeight="regular">*/}
+        {/*    Don&apos;t have an account?{" "}*/}
+        {/*    <SoftTypography*/}
+        {/*      component={Link}*/}
+        {/*      to="/authentication/sign-up"*/}
+        {/*      variant="button"*/}
+        {/*      color="info"*/}
+        {/*      fontWeight="medium"*/}
+        {/*      textGradient*/}
+        {/*    >*/}
+        {/*      Sign up*/}
+        {/*    </SoftTypography>*/}
+        {/*  </SoftTypography>*/}
+        {/*</SoftBox>*/}
       </SoftBox>
     </CoverLayout>
   );
