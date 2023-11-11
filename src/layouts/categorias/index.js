@@ -1,89 +1,65 @@
-
-
-// @mui material components
-import Card from "@mui/material/Card";
-
-// Soft UI Dashboard React components
-import SoftBox from "components/SoftBox";
-import SoftTypography from "components/SoftTypography";
-
-// Soft UI Dashboard React examples
+// Categorias.js
+import React from "react";
+import { Card } from "@mui/material";
 import DashboardLayout from "viaticos/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "viaticos/Navbars/DashboardNavbar";
 import Footer from "viaticos/Footer";
 import Table from "viaticos/Tables/Table";
-import {useHistory} from "react-router-dom";
-import {useState,useEffect} from "react";
-import {API_URL} from "../../config";
+import SoftBox from "components/SoftBox";
+import SoftTypography from "components/SoftTypography";
+import useCategoriasData from "./data/categoriasTableData";
+import Icon from "@mui/material/Icon";
+import SoftButton from "../../components/SoftButton";
 
-// Data
-// import authorsTableData from "layouts/tables/data/authorsTableData";
-// import projectsTableData from "layouts/tables/data/projectsTableData";
-const endpoint = API_URL+ '/categorias';
+
 function Categorias() {
-  // const { columns, rows } = authorsTableData;
-  // const { columns: prCols, rows: prRows } = projectsTableData;
- const [categorias,setCategorias]=useState([]);
- const token=localStorage.getItem("token");
-  useEffect(() => {
-    const fetchData= async ()=>
-    {
-      try {
-        const response=await fetch(endpoint, {
-          method: 'GET', // Método de la solicitud (puede ser GET, POST, PUT, DELETE, etc.)
-         // mode:'no-cors',// QUITAR PRODUCCION
-          headers: {
-                  Authorization: `Bearer ${token}`,
-          },
+const categoriasArray=useCategoriasData();
+    const categoriasData = categoriasArray.props.children[0];
+    const dialogoDelete = categoriasArray.props.children[1];
 
-        });
-        if(response.ok){
-           const data= await response.json();
-            // console.log("data ",data);
-          setCategorias(data);
-        }else {
-          console.error("Error al obtener datos respuesta",response.statusMessage);
-        }
-      }catch (error){
-        console.error("Error al obtener datos try",error);
-      }
+    const columns = [
+        { name: "idCategoria", headerName: "ID", align: "left" },
+        { name: "nombreCategoria", headerName: "CATEGORIA", align: "left" },
+        { name: "action",headerName: "Acciones", align: "center" },
+        // Agrega otras columnas según sea necesario
+    ];
 
-    };
-   fetchData();
-  }, []);
-  const columns=[
-     {name:'idCategoria',headerName:'id',align:'center',width:'50%'},
-     {name:'nombreCategoria', headerName:'Categoria',align:'left',width:'auto'}
-  ];
+    return (
 
-  return (
-    <DashboardLayout>
-      <DashboardNavbar />
-      <SoftBox py={3}>
-        <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SoftTypography variant="h6">Categorías</SoftTypography>
+        <DashboardLayout>
+            {dialogoDelete}
+            <DashboardNavbar />
+            <SoftBox py={3}>
+                <SoftBox mb={3}>
+                    <Card>
+                        <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                            <SoftTypography variant="h6">Categorías</SoftTypography>
+                            <SoftButton variant="gradient" color="dark">
+                                <Icon sx={{ fontWeight: "" }}>add</Icon>
+                                &nbsp;Nueva Categoría
+                            </SoftButton>
+                        </SoftBox>
+
+                        <SoftBox
+                            sx={{
+                                "& .MuiTableRow-root:not(:last-child)": {
+                                    "& td": {
+                                        borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                                            `${borderWidth[1]} solid ${borderColor}`,
+                                    },
+                                },
+                            }}
+                        >
+                            <Table columns={columns} rows={categoriasData} />
+
+
+                        </SoftBox>
+                    </Card>
+                </SoftBox>
             </SoftBox>
-            <SoftBox
-              sx={{
-                "& .MuiTableRow-root:not(:last-child)": {
-                  "& td": {
-                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                      `${borderWidth[1]} solid ${borderColor}`,
-                  },
-                },
-              }}
-            >
-              <Table columns={columns} rows={categorias} />
-            </SoftBox>
-          </Card>
-        </SoftBox>
-
-      </SoftBox>
-      <Footer />
-    </DashboardLayout>
-  );
+            <Footer />
+        </DashboardLayout>
+    );
 }
 
 export default Categorias;
