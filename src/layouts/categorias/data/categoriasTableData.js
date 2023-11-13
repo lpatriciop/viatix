@@ -1,5 +1,5 @@
 // useCategoriasData.js
-import { useState, useEffect,useRef } from "react";
+import { useState, useEffect } from "react";
 import { API_URL } from "../../../config";
 import SoftTypography from "../../../components/SoftTypography";
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,8 +10,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-import Button from "@mui/material/Button";
+
 import {Warning} from "@mui/icons-material";
+import SoftButton from "../../../components/SoftButton";
 
 function useCategoriasData() {
   const endpoint = API_URL + "/categorias";
@@ -130,22 +131,22 @@ function useCategoriasData() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button
+            <SoftButton
                 onClick={handleCancelDelete}
-                variant="outlined"
-                color="primary"
+                variant="gradient"
+                color="secondary"
                 fontWeight="medium"
             >
               Cancelar
-            </Button>
-            <Button
+            </SoftButton >
+            <SoftButton
                 onClick={handleConfirmDelete}
-                variant="contained"
+                variant="gradient"
                 color="error"
                 fontWeight="medium"
             >
               Eliminar
-            </Button>
+            </SoftButton >
           </DialogActions>
         </Dialog>
       </>
