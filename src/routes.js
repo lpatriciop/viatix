@@ -39,8 +39,8 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
-import VirtualReality from "layouts/virtual-reality";
-import RTL from "layouts/rtl";
+
+
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 
@@ -57,6 +57,9 @@ import Cube from "examples/Icons/Cube";
 import SignOut from "./layouts/authentication/sign-out";
 import SignUp from "./layouts/authentication/sign-up";
 import Categorias from "./layouts/categorias";
+import Empleados from "./layouts/empleados";
+import Proveedores from "./layouts/proveedores";
+
 
 const routes = [
   {
@@ -71,11 +74,21 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Proveedores",
-    key: "tables",
-    route: "/tables",
+    name: "Empleados",
+    key: "empleados",
+    route: "/empleados",
     icon: <Office size="12px" />,
-    component: <Tables />,
+    component: <Empleados />,
+    noCollapse: true,
+    isPrivate: true,
+  },
+  {
+    type: "collapse",
+    name: "Proveedores",
+    key: "proveedores",
+    route: "/proveedores",
+    icon: <Office size="12px" />,
+    component: <Proveedores />,
     noCollapse: true,
     isPrivate: true,
   },
@@ -100,26 +113,8 @@ const routes = [
     noCollapse: true,
     isPrivate: true,
   },
-  {
-    type: "collapse",
-    name: "Viaticos",
-    key: "virtual-reality",
-    route: "/virtual-reality",
-    icon: <Cube size="12px" />,
-    component: <VirtualReality />,
-    noCollapse: true,
-    isPrivate: true,
-  },
-  {
-    type: "collapse",
-    name: "Empleados",
-    key: "rtl",
-    route: "/rtl",
-    icon: <Settings size="12px" />,
-    component: <RTL />,
-    noCollapse: true,
-    isPrivate: true,
-  },
+
+
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
     type: "collapse",

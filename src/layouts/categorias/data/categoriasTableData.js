@@ -11,19 +11,30 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 
-import {Warning} from "@mui/icons-material";
+import {Add, Icecream, PlusOne, Warning} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
+import {TextField} from "@mui/material";
+
+
 
 function useCategoriasData() {
   const endpoint = API_URL + "/categorias";
   const [data, setData] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(false);
+  //--
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editItemId, setEditItemId] = useState(null);
+  const [categoriaValue,setCategoriaValue]=useState();
+  //--
+  const [newDialogOpen, setNewDialogOpen] = useState(false);
+  const [newItemId, setNewItemId] = useState(null);
+  const [newCategoriaValue,setNewCategoriaValue]=useState();
+
   const token = localStorage.getItem("token");
 
-//eliminar
+//ELIMINAR
   const handleDelete = async (id) => {
-
     setDeleteItemId(id);
     setDeleteDialogOpen(true);
   };
@@ -31,7 +42,6 @@ function useCategoriasData() {
     setDeleteItemId(null);
     setDeleteDialogOpen(false);
   };
-  //fin eliminar
   const handleConfirmDelete = async () => {
     try {
       const response = await fetch(`${API_URL}/categorias/${deleteItemId}`, {
@@ -54,6 +64,100 @@ function useCategoriasData() {
       setDeleteDialogOpen(false);
     }
   };
+// FIN ELIMINAR
+//EDITAR
+  const handleEdit = (item) => {
+
+    setEditItemId(item);
+    setCategoriaValue(item.nombreCategoria);
+    setEditDialogOpen(true);
+  };
+  const handleCancelEdit = () => {
+    setEditItemId(null);
+    setEditDialogOpen(false);
+  };
+  const handleConfirmEdit = async (id) => {
+
+    try {
+      // Aquí debes obtener el valor actualizado del campo de edición, ya sea utilizando un estado local o un estado global
+      // Ejemplo con un estado local:
+       const updatedCategoriaValue = categoriaValue;
+
+      // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
+      const response = await fetch(`${API_URL}/categorias/${id.idCategoria}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nombreCategoria: updatedCategoriaValue,
+          // Otros campos actualizados si los hay
+        }),
+      });
+
+      if (response.ok) {
+        console.log(`Categoría con ID ${id} editada exitosamente`);
+        // Actualiza el estado o vuelve a cargar los datos después de la edición
+        fetchData();
+      } else {
+        console.error('Error al editar la categoría');
+      }
+    } catch (error) {
+      console.error('Error al procesar la solicitud de edición:', error);
+    } finally {
+      setEditItemId(null);
+      setEditDialogOpen(false);
+    }
+  };
+
+
+  //NEW
+  const handleNew = (item) => {
+
+    setNewItemId(item);
+    setNewCategoriaValue("");
+    setNewDialogOpen(true);
+  };
+  const handleCancelNew = () => {
+    setNewItemId(null);
+    setNewDialogOpen(false);
+  };
+  const handleConfirmNew = async () => {
+
+    try {
+
+
+      // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
+      const response = await fetch(`${API_URL}/categorias`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+
+          nombreCategoria: newCategoriaValue,
+          // Otros campos actualizados si los hay
+        }),
+      });
+
+      if (response.ok) {
+        console.log(`Categoría  exitosamente`);
+        // Actualiza el estado o vuelve a cargar los datos después de la edición
+        fetchData();
+      } else {
+        console.error('Error al editar la categoría');
+      }
+    } catch (error) {
+      console.error('Error al procesar la solicitud de edición:', error);
+    } finally {
+      setNewItemId(null);
+      setNewDialogOpen(false);
+    }
+  };
+
+
   const fetchData = async () => {
     try {
       const response = await fetch(endpoint, {
@@ -76,6 +180,7 @@ function useCategoriasData() {
                     color="success"
                     fontWeight="medium"
                     style={{ marginRight: 8 }}
+                    onClick={()=>handleEdit(item)}
 
                 >
                   <EditIcon />
@@ -149,6 +254,92 @@ function useCategoriasData() {
             </SoftButton >
           </DialogActions>
         </Dialog>
+
+        <Dialog
+            open={editDialogOpen}
+            onClose={handleCancelEdit}
+            aria-labelledby="edit-dialog-title"
+            aria-describedby="edit-dialog-description"
+        >
+          <DialogTitle id="edit-dialog-title">
+            Editar Categoría
+          </DialogTitle>
+          <DialogContent>
+            {/* Campo de edición para la categoría */}
+            <TextField
+
+                label="Categoría"
+                //variant="outlined"
+                fullWidth
+                  // Puedes usar un estado para almacenar el valor del campo de edición
+                value={categoriaValue} onChange={(e) => setCategoriaValue(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <SoftButton
+                onClick={handleCancelEdit}
+                variant="gradient"
+                color="secondary"
+                fontWeight="medium"
+            >
+              Cancelar
+            </SoftButton>
+            <SoftButton
+
+                onClick={() => handleConfirmEdit(editItemId)}
+                variant="gradient"
+                color="success"
+                fontWeight="medium"
+            >
+              Guardar
+            </SoftButton>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+            open={newDialogOpen}
+            onClose={handleCancelNew}
+            aria-labelledby="edit-dialog-title"
+            aria-describedby="edit-dialog-description"
+        >
+          <DialogTitle id="edit-dialog-title">
+            Crea Nueva Categoría
+          </DialogTitle>
+          <DialogContent>
+            {/* Campo de edición para la categoría */}
+            <TextField
+
+                label="Categoría"
+                //variant="outlined"
+                fullWidth
+                // Puedes usar un estado para almacenar el valor del campo de edición
+                value={newCategoriaValue} onChange={(e) => setNewCategoriaValue((e.target.value))}
+            />
+          </DialogContent>
+          <DialogActions>
+            <SoftButton
+                onClick={handleCancelNew}
+                variant="gradient"
+                color="secondary"
+                fontWeight="medium"
+            >
+              Cancelar
+            </SoftButton>
+            <SoftButton
+
+                onClick={() => handleConfirmNew()}
+                variant="gradient"
+                color="success"
+                fontWeight="medium"
+            >
+              Guardar
+            </SoftButton>
+          </DialogActions>
+        </Dialog>
+
+        <SoftButton variant="gradient" color="dark"  onClick={handleNew}>
+        <Add /> &nbsp;Nueva Categoría
+        </SoftButton>
       </>
   );
 }

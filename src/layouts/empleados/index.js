@@ -1,4 +1,4 @@
-// Categorias.js
+
 import React from "react";
 import { Card } from "@mui/material";
 import DashboardLayout from "viaticos/LayoutContainers/DashboardLayout";
@@ -7,25 +7,33 @@ import Footer from "viaticos/Footer";
 import Table from "viaticos/Tables/Table";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import useCategoriasData from "./data/categoriasTableData";
+import useEmpleadosData from "./data/empleadosTableData";
 import Icon from "@mui/material/Icon";
 import SoftButton from "../../components/SoftButton";
 
 
-function Categorias() {
-const categoriasArray=useCategoriasData();
-    const categoriasData = categoriasArray.props.children[0];
-    const dialogoDelete = categoriasArray.props.children[1];
-    const dialogoEdit = categoriasArray.props.children[2];
-    const dialogoNew = categoriasArray.props.children[3];
-    const botonNew = categoriasArray.props.children[4];
-
+function Empleados() {
+const empleadosArray=useEmpleadosData();
+    const empleadosData = empleadosArray.props.children[0];
+     const dialogoDelete = empleadosArray.props.children[1];
+    const dialogoEdit = empleadosArray.props.children[2];
+     const dialogoNew = empleadosArray.props.children[3];
+     const botonNew = empleadosArray.props.children[4];
     const columns = [
-        { name: "idCategoria", headerName: "ID", align: "left" },
-        { name: "nombreCategoria", headerName: "CATEGORIA", align: "left" },
-        { name: "action",headerName: "Acciones", align: "center" },
+        { name: "idEmpleado", headerName: "ID", align: "left" },
+         { name: "dni", headerName: "DNI", align: "left" },
+        { name: "nombre", headerName: "Nombre", align: "left" },
+        { name: "apellido", headerName: "Apellido", align: "left" },
+         { name: "username", headerName: "Correo", align: "left" },
+       //  { name: "password", headerName: "Contraseña", align: "left" },
+         { name: "departamento", headerName: "Departamento", align: "left" },
+        // { name: "enabled", headerName: "Enable", align: "left" },
+        // { name: "departamento", headerName: "Departamento", align: "left" },
+         { name: "role", headerName: "Rol", align: "left" },
+        { name: "action", headerName: "Acciones", align: "center" },
         // Agrega otras columnas según sea necesario
     ];
+
 
     return (
 
@@ -38,7 +46,7 @@ const categoriasArray=useCategoriasData();
                 <SoftBox mb={3}>
                     <Card>
                         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                            <SoftTypography variant="h6">Categorías</SoftTypography>
+                            <SoftTypography variant="h6">Empleados</SoftTypography>
                             {botonNew}
                         </SoftBox>
 
@@ -52,7 +60,7 @@ const categoriasArray=useCategoriasData();
                                 },
                             }}
                         >
-                            <Table columns={columns} rows={categoriasData} />
+                            <Table columns={columns} rows={empleadosData} />
 
 
                         </SoftBox>
@@ -64,4 +72,4 @@ const categoriasArray=useCategoriasData();
     );
 }
 
-export default Categorias;
+export default Empleados;
