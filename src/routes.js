@@ -1,17 +1,3 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 /** 
   All of the routes for the Soft UI Dashboard React are added here,
@@ -59,6 +45,7 @@ import SignUp from "./layouts/authentication/sign-up";
 import Categorias from "./layouts/categorias";
 import Empleados from "./layouts/empleados";
 import Proveedores from "./layouts/proveedores";
+import Salidas from "./layouts/salidas";
 
 
 const routes = [
@@ -106,29 +93,29 @@ const routes = [
   {
     type: "collapse",
     name: "Salidas",
-    key: "billing",
-    route: "/billing",
+    key: "salidas",
+    route: "/salidas",
     icon: <CreditCard size="12px" />,
-    component: <Billing />,
+    component: <Salidas />,
     noCollapse: true,
     isPrivate: true,
   },
 
 
-  { type: "title", title: "Account Pages", key: "account-pages" },
+  { type: "title", title: "Opciones de Sesión", key: "account-pages" },
   {
     type: "collapse",
     name: "Perfil",
     key: "profile",
     route: "/profile",
     icon: <CustomerSupport size="12px" />,
-    component: <Profile />,
+    component: <Billing  />,
     noCollapse: true,
     isPrivate: true,
   },
   {
     type: "collapse",
-    name: "Iniciar Sesion",
+    name: "Iniciar Sesión",
     key: "sign-in",
     route: "/authentication/sign-in",
     icon: <SpaceShip size="12px" />,

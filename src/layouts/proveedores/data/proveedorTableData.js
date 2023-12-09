@@ -152,8 +152,8 @@ function useProveedorData() {
       if (
           editFields.ruc.trim() === '' ||
           editFields.nombreProveedor.trim() === '' ||
-          editFields.descripcionProveedor.trim() === '' ||
-          editFields.categoria.trim() === ''
+          editFields.descripcionProveedor.trim() === ''
+
 
       ) {
         setError('Por favor, complete todos los campos obligatorios.');
@@ -161,7 +161,7 @@ function useProveedorData() {
        }
 
       // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
-      const response = await fetch(`${API_URL}/proveedores`, {
+      const response = await fetch(`${API_URL}/proveedores?categoriaId=${editFields.categoria}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ function useProveedorData() {
           ruc: editFields.ruc,
           nombreProveedor:editFields.nombreProveedor,
           descripcionProveedor: editFields.descripcionProveedor,
-          categoria:editFields.categoria,
+          //categoriaId:editFields.categoria,
 
         }),
       });
@@ -381,7 +381,7 @@ function useProveedorData() {
         aria-describedby="edit-dialog-description"
     >
       <DialogTitle id="edit-dialog-title">
-        Crea Nuevo Empleado
+        Crea Nuevo Proveedor
       </DialogTitle>
       <DialogContent>
         <TextField     label="RUC"   fullWidth
@@ -408,7 +408,7 @@ function useProveedorData() {
             disabled={categorias.length === 0}
         >
           {categorias.map((categorias) => (
-              <MenuItem key={categorias.idCategoria} value={categorias.nombreCategoria}>
+              <MenuItem key={categorias.idCategoria} value={categorias.idCategoria}>
                 {categorias.nombreCategoria}
               </MenuItem>
           ))}

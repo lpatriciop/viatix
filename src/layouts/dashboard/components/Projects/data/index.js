@@ -20,8 +20,8 @@ import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
 export default function data() {
-  const avatars = (members) =>
-    members.map(([image, name]) => (
+  const avatars = (empleados) =>
+    empleados.map(([image, name]) => (
       <Tooltip key={name} title={name} placeholder="bottom">
         <SoftAvatar
           src={image}
@@ -47,16 +47,16 @@ export default function data() {
 
   return {
     columns: [
-      { name: "companies", align: "left" },
-      { name: "members", align: "left" },
-      { name: "budget", align: "center" },
-      { name: "completion", align: "center" },
+      { name: "destinos", align: "left" },
+      { name: "empleados", align: "left" },
+      { name: "gastos", align: "center" },
+      { name: "estado", align: "center" },
     ],
 
     rows: [
       {
-        companies: [logoXD, "Soft UI XD Version"],
-        members: (
+        destinos: [logoXD, "Guayaquil - Presentación Producto Nuevo"],
+        empleados: (
           <SoftBox display="flex" py={1}>
             {avatars([
               [team1, "Ryan Tompson"],
@@ -66,20 +66,20 @@ export default function data() {
             ])}
           </SoftBox>
         ),
-        budget: (
+        gastos: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
             $14,000
           </SoftTypography>
         ),
-        completion: (
+        estado: (
           <SoftBox width="8rem" textAlign="left">
             <SoftProgress value={60} color="info" variant="gradient" label={false} />
           </SoftBox>
         ),
       },
       {
-        companies: [logoAtlassian, "Add Progress Track"],
-        members: (
+        destinos: [logoAtlassian, "Add Progress Track"],
+        empleados: (
           <SoftBox display="flex" py={1}>
             {avatars([
               [team2, "Romina Hadid"],
@@ -87,20 +87,20 @@ export default function data() {
             ])}
           </SoftBox>
         ),
-        budget: (
+        gastos: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
             $3,000
           </SoftTypography>
         ),
-        completion: (
+        estado: (
           <SoftBox width="8rem" textAlign="left">
             <SoftProgress value={10} color="info" variant="gradient" label={false} />
           </SoftBox>
         ),
       },
       {
-        companies: [logoSlack, "Fix Platform Errors"],
-        members: (
+        destinos: [logoSlack, "Machala - Reunión Socios"],
+        empleados: (
           <SoftBox display="flex" py={1}>
             {avatars([
               [team1, "Ryan Tompson"],
@@ -108,61 +108,61 @@ export default function data() {
             ])}
           </SoftBox>
         ),
-        budget: (
+        gastos: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
             Not set
           </SoftTypography>
         ),
-        completion: (
+        estado: (
           <SoftBox width="8rem" textAlign="left">
             <SoftProgress value={100} color="success" variant="gradient" label={false} />
           </SoftBox>
         ),
       },
       {
-        companies: [logoSpotify, "Launch our Mobile App"],
-        members: (
+        destinos: [logoSpotify, "Guayaquil - Presentación Nuevos Clientes"],
+        empleados: (
           <SoftBox display="flex" py={1}>
             {avatars([
-              [team4, "Jessica Doe"],
-              [team3, "Alexander Smith"],
-              [team2, "Romina Hadid"],
+              [team4, "Juan Perez"],
+              [team3, "Alex Perez"],
+              [team2, "Alexandra Hadid"],
               [team1, "Ryan Tompson"],
             ])}
           </SoftBox>
         ),
-        budget: (
+        gastos: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
             $20,500
           </SoftTypography>
         ),
-        completion: (
+        estado: (
           <SoftBox width="8rem" textAlign="left">
             <SoftProgress value={100} color="success" variant="gradient" label={false} />
           </SoftBox>
         ),
       },
       {
-        companies: [logoJira, "Add the New Pricing Page"],
-        members: (
+        destinos: [logoJira, "Esmeraldas - Soporte Técnico"],
+        empleados: (
           <SoftBox display="flex" py={1}>
             {avatars([[team4, "Jessica Doe"]])}
           </SoftBox>
         ),
-        budget: (
+        gastos: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
             $500
           </SoftTypography>
         ),
-        completion: (
+        estado: (
           <SoftBox width="8rem" textAlign="left">
             <SoftProgress value={25} color="info" variant="gradient" label={false} />
           </SoftBox>
         ),
       },
       {
-        companies: [logoInvesion, "Redesign New Online Shop"],
-        members: (
+        destinos: [logoInvesion, "Manta - Entrega de Equipos"],
+        empleados: (
           <SoftBox display="flex" py={1}>
             {avatars([
               [team1, "Ryan Tompson"],
@@ -170,12 +170,12 @@ export default function data() {
             ])}
           </SoftBox>
         ),
-        budget: (
+        gastos: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
             $2,000
           </SoftTypography>
         ),
-        completion: (
+        estado: (
           <SoftBox width="8rem" textAlign="left">
             <SoftProgress value={40} color="info" variant="gradient" label={false} />
           </SoftBox>
