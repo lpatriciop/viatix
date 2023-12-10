@@ -24,6 +24,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SoftButton from "../../components/SoftButton";
 import useSalidasData from "./data/salidasTableData";
 import PropTypes from "prop-types";
+import {parseISO} from "date-fns";
 
 function CrearSalida({setReloadListado}){
 
@@ -35,8 +36,8 @@ function CrearSalida({setReloadListado}){
         descripcionSalidad: "",
         ciudadOrigen:"",
         ciudadDestino: "",
-        fechaSalida: "",
-        fechaRegreso: "",
+        fechaSalida: parseISO(""),
+        fechaRegreso: parseISO(""),
         gastoEstimado: "0.0",
     });
     const useStyles = makeStyles((theme) => ({
@@ -57,7 +58,7 @@ function CrearSalida({setReloadListado}){
             if (response.ok) {
                 const fetchedData = await response.json();
                 setCiudades(fetchedData);
-                //console.log(dataWithActions);
+
             } else {
                 console.error('Error fetching data');
             }
@@ -177,8 +178,8 @@ function CrearSalida({setReloadListado}){
                 <Grid item xs={12} md={3}>
                     <Autocomplete
                         options={ciudades}
-                        getOptionLabel={(option) => option.nombreCiudad || "Ciudad Origen"} // Ajusta esto según la estructura de datos de las ciudades
-                        value={editFields.ciudadOrigen}
+                        getOptionLabel={(option) => option.nombreCiudad || "Seleccione una ciudad"} // Ajusta esto según la estructura de datos de las ciudades
+                        value={editFields.ciudadOrigen||null}
                         onChange={(event, newValue) => {
                             setEditFields({...editFields,ciudadOrigen:newValue });
                         }}
@@ -189,8 +190,8 @@ function CrearSalida({setReloadListado}){
                 <Grid item xs={12} md={3}>
                     <Autocomplete
                         options={ciudades}
-                        getOptionLabel={(option) => option.nombreCiudad || "Ciudad Destino"} // Ajusta esto según la estructura de datos de las ciudades
-                        value={editFields.ciudadDestino}
+                        getOptionLabel={(option) => option.nombreCiudad || "Seleccione una ciudad"} // Ajusta esto según la estructura de datos de las ciudades
+                        value={editFields.ciudadDestino||null}
                         onChange={(event, newValue) => {
                             setEditFields({...editFields,ciudadDestino:newValue });
                         }}
@@ -204,14 +205,13 @@ function CrearSalida({setReloadListado}){
                         label="Salida"
                         value={editFields.fechaSalida}
                         onChange={(newValue) => {
-                            setEditFields({...editFields,fechaSalida:newValue });
+                            setEditFields({...editFields,fechaSalida:newValue});
                         }}
-                        renderInput={(params) => <TextField {...params} />}
-                        InputLabelProps={{
-                            style: { fontSize: '0.5rem' }
-                        }}
+                        // renderInput={(params) => <TextField {...params} />}
+
                         fullWidth
                     />
+
 
                 </Grid>
                 <Grid item xs={6} md={3}>
@@ -221,15 +221,16 @@ function CrearSalida({setReloadListado}){
                         onChange={(newValue) => {
                             setEditFields({...editFields,fechaRegreso:newValue });
                         }}
-                        renderInput={(params) => <TextField {...params} />}
+                        // renderInput={(params) => <TextField {...params} />}
                         fullWidth
                     />
+
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={12}>
                     <SoftButton
                         onClick={()=>handleConfirmNew()}
                         variant="contained" color="primary" fullWidth>
-                        Aceptar
+                        Agregar Salida
                     </SoftButton>
                 </Grid>
 
@@ -245,7 +246,7 @@ function Listado({reloadListado,setReloadListado}){
     // Variable to trigger
     const dataArray=useSalidasData(reloadListado);
     const tablaDatos = dataArray.props.children[0];
-    console.log(tablaDatos);
+  //  console.log(tablaDatos);
     // const dialogoAgregar=dataArray.props.children[1];
     const columns = [
         { name: "idSalida", headerName: "ID", align: "left" },
