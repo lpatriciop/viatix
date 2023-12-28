@@ -10,19 +10,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-
-import {Add, CheckBox, Icecream, PlusOne, Warning} from "@mui/icons-material";
+import {  ArrowForward,  CheckBox,  GridOn,} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
-import {InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {InputLabel, MenuItem,TextField} from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import Alert from '@mui/material/Alert';
 
 
 function useSalidasData(reload) {
-  const endpoint = API_URL + "/salidas";
+
+  const endpoint = API_URL + "/salidas/ordenada";
   const [data,setData]=useState([]);
   const token = localStorage.getItem("token");
-  const [error, setError] = useState('');
-//DEL
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(false);
   //ELIMINAR
   const handleDelete = async (id) => {
@@ -30,6 +29,10 @@ function useSalidasData(reload) {
     setDeleteDialogOpen(true);
   };
 //ASIGNAR
+  const [asignarAlerta, setAsignarAlerta] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState('OK');
+  const [tipoAlerta, setTipoAlerta] = useState('success');
+
   const [editFields, setEditFields] = useState({
     descripcionSalidad: "",
     ciudadOrigen:"",
@@ -38,29 +41,61 @@ function useSalidasData(reload) {
     fechaRegreso: "",
     gastoEstimado: "0.0",
   });
-  const [editItemId, setEditItemId] = useState(null);
+  const [editItemId, setEditItemId] = useState([]);
   const [editDialogoAsignar, setEditDialogoAsignar] = useState(false);
-  const handleAsignar = (item) => {
+  const handleAsignar = async () => {
 
-    setEditItemId(item);
-    setEditFields({
-      idSalida: item.idSalida,
-      ciudadOrigen: item.ciudadOrigen,
-      ciudadDestino: item.ciudadDestino,
-      fechaSalida: item.fechaSalida,
-      fechaRegreso: item.fechaRegreso,
-      gastoEstimado: item.gastoEstimado,
-      estado: item.estado,
-    });
+   try {
+     if(true){
 
-    setEditDialogoAsignar(true);
+     }else{
+       setMensajeAlerta("Error los campos son obligatorios");
+       setTipoAlerta("error");
+       setAsignarAlerta(true);
+       return;
+     }
+
+     const response = await fetch(`${API_URL}/empleadoSalidas`,{
+       method:'POST',
+       headers:{
+         'Content-Type': 'application/json',
+         Authorization: `Bearer ${token}`,
+       },
+       body: JSON.stringify({
+         empleado:empleado,
+         salida:editItemId,
+         montoMaximoGasto:'100'
+       }),
+     });
+     if(response.ok){
+
+       setMensajeAlerta(`Empleado ${empleado.nombreCompleto} Asignado Satisfactoriamente`)
+       setTipoAlerta("success");
+       setAsignarAlerta(true);
+
+      // console.log("empleadoSalida Creado");
+     }else{
+       setMensajeAlerta(`Error al asignar al empleado ${empleado.nombreCompleto}`)
+       setTipoAlerta("error");
+       setAsignarAlerta(true);
+     }
+   }catch (error){
+     console.error("error al procesar solicitud")
+   }finally {
+     setEditDialogoAsignar(false);
+   }
+
+
   };
   const handleCancelAsignar = () => {
-    setEditItemId(null);
     setEditDialogoAsignar(false);
   };
-  const [empleado, setEmpleado] = useState(null);
+
+
   const [empleados, setEmpleados] = useState([]);
+  const [empleado, setEmpleado] = useState([]);
+ // const [empleado, setEmpleado] = useState(empleados.length > 0 ? empleados[0].idEmpleado : '');
+
   //FIN ASIGNAR
   const endpointComplemento = API_URL + "/empleados";
   const handleCancelDelete = () => {
@@ -105,14 +140,22 @@ function useSalidasData(reload) {
 
     setEditDialogOpen(true);
   };
+  const handleClickAsignar=(e,item)=>{
+    e.preventDefault();
+    setEditItemId(item)
+    setEditDialogoAsignar(true)
+  }
+  const  handleClickDetalle=(e,item)=>{
 
+  }
   const fetchData= async ()=> {
     try {
-      const response = await fetch(endpoint, {
-        method: 'GET',
+      const response = await fetch(endpoint+"?orderBy=fechaSalidaD", {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
         },
+
       });
       if (response.ok) {
         const fetchedData = await response.json();
@@ -130,27 +173,27 @@ function useSalidasData(reload) {
               <>
                 <SoftTypography
                     component="a"
-                    href="#"
+                    href={`#/detalle/${item.idSalida}`}
                     variant="caption"
                     color="success"
                     fontWeight="medium"
                     style={{marginRight: 8}}
-                    onClick={() => handleEdit(item)}
+                   // onClick={(e) => handleClickDetalle(e,item)}
 
                 >
-                  <EditIcon/>
-                  &nbsp;Editar
+                  <GridOn/>
+                  &nbsp;Detalles
                 </SoftTypography>
 
                 <SoftTypography
                     component="a"
                     href="#"
                     variant="caption"
-                    color="error"
+                    color="secondary"
                     fontWeight="medium"
-                    onClick={() => handleAsignar(item.idSalida)}
+                    onClick={(e) => handleClickAsignar(e,item)}
                 >
-                  <DeleteIcon/>&nbsp;Asignar
+                  <ArrowForward/>&nbsp;Asignar
                 </SoftTypography>
               </>
           ),
@@ -168,35 +211,101 @@ function useSalidasData(reload) {
        fetchData();
 
     },[reload] ); // Empty dependency array to run the effect only once
-  // const fetchDataComplemento=async()=>{
-  //   try {
-  //     const response=await fetch(endpointComplemento,
-  //         {
-  //           method: 'GET',
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         });
-  //     if(response.ok){
-  //       const dataComp=await response.json();
-  //       dataComp.length>0?setEmpleados(dataComp)
-  //           :setEmpleados([{"idEmpleado":"-1","nombreCompleto":"No existen empleados"}]);
-  //
-  //     }else {
-  //       console.error('Error fetching data');
-  //     }
-  //   }catch (error){
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-  // useEffect(() => {
-  // //  fetchDataComplemento();
-  //   //  console.log(newDialogOpen,departamentos);
-  // }, [editDialogoAsignar]);
+  const fetchDataComplemento=async()=>{
+    try {
+      const response=await fetch(endpointComplemento,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+      if(response.ok){
+        const dataComp=await response.json();
+        // dataComp.length>0?setEmpleados(dataComp)
+        //     :setEmpleados([{"idEmpleado":"-1","nombreCompleto":"No existen empleados"}]);
+
+        if (dataComp.length > 0) {
+          const empleadosConNombreCompleto = dataComp.map(empleado => ({
+            idEmpleado: empleado.idEmpleado,
+            nombreCompleto: `${empleado.nombre} ${empleado.apellido}`,
+            role:empleado.role,
+          }));
+
+          setEmpleados(empleadosConNombreCompleto);
+
+        } else {
+          setEmpleados([{"idEmpleado": "-1", "nombreCompleto": "No existen empleados"}]);
+        }
+      }else {
+        console.error('Error fetching data');
+      }
+    }catch (error){
+      console.error('Error fetching data:', error);
+    }
+  };
+  useEffect(() => {
+    fetchDataComplemento();
+    //  console.log(newDialogOpen,departamentos);
+  }, [editDialogoAsignar]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAsignarAlerta(false);
+    }, 3000); // 3000 milisegundos = 3 segundos
+
+    return () => clearTimeout(timer);
+  }, [asignarAlerta]);
+
   return (<>
     {data}
-<></>
+    <Dialog
+     open={editDialogoAsignar}
+     onClose={handleCancelAsignar}
+    aria-labelledby="edit-dialog-title"
+    aria-describedby="edit-dialog-description"
+    >
+      <DialogTitle id="edit-dialog-title">
+        Asignar Empleado a Salida
+      </DialogTitle>
+      <DialogContent>
+        <InputLabel id="complemento-label">SALIDA:</InputLabel>
+        <SoftTypography>{editItemId.descripcionSalida}</SoftTypography>
+        <InputLabel >Asignar Empleado:</InputLabel>
+        <br/>
+        <Autocomplete
+            options={empleados}
+            getOptionLabel={(empleado) => empleado.nombreCompleto}
+            value={empleado}
+            onChange={(event,newValue)=>{setEmpleado(newValue)}}
+            renderInput={(params) => <TextField {...params} label="Empleados" />}
+            fullWidth
+        />
 
+
+      </DialogContent>
+      <DialogActions>
+        <SoftButton
+            onClick={handleCancelAsignar}
+            variant="gradient"
+            color="secondary"
+            fontWeight="medium"
+        >
+          Cancelar
+        </SoftButton>
+        <SoftButton
+            alt="Asignar Empleado a Salida"
+            onClick={() => handleAsignar()}
+            variant="gradient"
+            color="success"
+            fontWeight="medium"
+        >
+          Asignar
+        </SoftButton>
+      </DialogActions>
+    </Dialog>
+    {asignarAlerta && (<Alert severity={tipoAlerta} >
+      {mensajeAlerta}
+    </Alert>)}
   </>);
 }
 

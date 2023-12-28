@@ -14,6 +14,7 @@ import createCache from "@emotion/cache";
 import routes from "routes";
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
 import brand from "assets/images/logo-ct.png";
+import Detalle from "./layouts/detalle";
 
 
 export default function App() {
@@ -128,6 +129,7 @@ export default function App() {
               {getRoutes(routes)}
               {/*<Route path="*" element={<Navigate to="/dashboard" />} />*/}
                 <Route path="*" element={<Navigate to="/authentication/sign-in" />} key={"sign-in"} />
+                <Route path="/detalle/:idSalida" element={<Detalle />} />
             </Routes>
           </ThemeProvider>
 

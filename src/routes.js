@@ -46,6 +46,7 @@ import Categorias from "./layouts/categorias";
 import Empleados from "./layouts/empleados";
 import Proveedores from "./layouts/proveedores";
 import Salidas from "./layouts/salidas";
+import Detalle from "./layouts/detalle";
 
 
 const routes = [

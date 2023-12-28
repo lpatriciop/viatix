@@ -67,7 +67,7 @@ function CrearSalida({setReloadListado}){
         }
     }
     useEffect(() => {
-     fetchCiudades();
+    fetchCiudades();
     }, []);
     const classes = useStyles();
     const [error, setError] = useState('');
@@ -246,7 +246,10 @@ function Listado({reloadListado,setReloadListado}){
     // Variable to trigger
     const dataArray=useSalidasData(reloadListado);
     const tablaDatos = dataArray.props.children[0];
-  //  console.log(tablaDatos);
+    const dialogoAsignar=dataArray.props.children[1]
+    const dialogoOk=dataArray.props.children[2]
+
+    //  console.log(tablaDatos);
     // const dialogoAgregar=dataArray.props.children[1];
     const columns = [
         { name: "idSalida", headerName: "ID", align: "left" },
@@ -267,9 +270,11 @@ function Listado({reloadListado,setReloadListado}){
 return(
 
     <SoftBox py={3}>
-
+        {dialogoOk}
     <SoftBox mb={3}>
+
         <Card>
+
             <SoftBox
                 sx={{
                     "& .MuiTableRow-root:not(:last-child)": {
@@ -280,6 +285,8 @@ return(
                     },
                 }}
             >
+                {dialogoAsignar}
+
                 <Table columns={columns} rows={tablaDatos} />
 
 
