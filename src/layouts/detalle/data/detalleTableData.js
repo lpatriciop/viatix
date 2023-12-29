@@ -11,16 +11,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 
-import {Add, Icecream, PlusOne, Warning} from "@mui/icons-material";
+import {Add, ArrowBack, Icecream, PlusOne, Warning} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
 import {InputLabel, Select, TextField,MenuItem} from "@mui/material";
+import Alert from "@mui/material/Alert";
 
 
 
 function useDetalleData({idSalida}) {
 
-  const endpoint = `${API_URL}/empleadoSalidas/salida/${idSalida}`;
-  console.log(endpoint);
+  const [asignarAlerta, setAsignarAlerta] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState('OK');
+  const [tipoAlerta, setTipoAlerta] = useState('success');
+
   const [data,setData]=useState([]);
   const token = localStorage.getItem("token");
   const [error, setError] = useState('');
@@ -28,7 +31,8 @@ function useDetalleData({idSalida}) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(false);
   //ELIMINAR
-  const handleDelete = async (id) => {
+  const handleDelete = async (e,id) => {
+    e.preventDefault();
     setDeleteItemId(id);
     setDeleteDialogOpen(true);
   };
@@ -38,7 +42,7 @@ function useDetalleData({idSalida}) {
   };
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch(`${API_URL}/empleados/${deleteItemId}`, {
+      const response = await fetch(`${API_URL}/empleadoSalidas/${deleteItemId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -46,10 +50,15 @@ function useDetalleData({idSalida}) {
       });
 
       if (response.ok) {
-        console.log(`Empleado con ID ${deleteItemId} eliminada exitosamente`);
+        setMensajeAlerta(`Empleado Retirado exitosamente`);
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
+        //console.log(`Empleado con ID ${deleteItemId} eliminada exitosamente`);
         fetchData();
       } else {
-        console.error('Error al eliminar la categoría');
+        setMensajeAlerta("Error al eliminar salida, no se puede eliminar salida con empleados asignados.");
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
       }
     } catch (error) {
       console.error('Error al procesar la solicitud de eliminación:', error);
@@ -227,7 +236,9 @@ function useDetalleData({idSalida}) {
       console.error('Error fetching data:', error);
     }
   };
+
   const fetchData= async ()=> {
+    const endpoint = `${API_URL}/empleadoSalidas/salida/${idSalida}`;
     try {
       const response = await fetch(endpoint, {
         method: 'GET',
@@ -238,15 +249,15 @@ function useDetalleData({idSalida}) {
       if (response.ok) {
         const fetchedData = await response.json();
         const dataWithActions = fetchedData.map(item => ({
-          idEmpleado: item.idEmpleado,
-           dni: item.dni,
-          nombre: `${item.nombre} ${item.apellido}`,
-           apellido: item.apellido,
-           username: item.username,
-           password: item.password,
-           departamento: item.departamento.nombreDepartamento,
+          idEmpleadoSalida: item.id,
+           dni: item.empleado.dni,
+          nombre: `${item.empleado.nombre} ${item.empleado.apellido}`,
+           apellido: item.empleado.apellido,
+           // username: item.empleado.username,
+           // password: item.empleado.password,
+           departamento: item.empleado.departamento.nombreDepartamento,
           // enabled: item.enabled,
-           role: item.role,
+        //   role: item.empleado.role,
           action: (
               <>
                 <SoftTypography
@@ -269,9 +280,9 @@ function useDetalleData({idSalida}) {
                     variant="caption"
                     color="error"
                     fontWeight="medium"
-                    onClick={() => handleDelete(item.idEmpleado)}
+                    onClick={(e) => handleDelete(e,item.id)}
                 >
-                  <DeleteIcon/>&nbsp;Eliminar
+                  <ArrowBack/>&nbsp;Retirar
                 </SoftTypography>
               </>
           ),
@@ -308,11 +319,12 @@ function useDetalleData({idSalida}) {
     >
       <DialogTitle id="alert-dialog-title">
         <Warning color="warning" style={{ marginRight: 8 }} />
-        Confirmar eliminación
+        Confirmar Retiro de Empleado
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          ¿Está seguro de eliminar este ítem?
+          ¿Está seguro de retirar el empleado de la salida?
+          <br/>Solo lo podrá hacer, si no tiene un viático asignado aún.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -478,9 +490,11 @@ function useDetalleData({idSalida}) {
         </SoftButton>
       </DialogActions>
     </Dialog>
-
+    {asignarAlerta && (<Alert severity={tipoAlerta} >
+      {mensajeAlerta}
+    </Alert>)}
     <SoftButton variant="gradient" color="dark"  onClick={handleNew}>
-      <Add /> &nbsp;Nuevo Empleado
+      <Add /> &nbsp;Asignar
     </SoftButton>
   </>);
 }

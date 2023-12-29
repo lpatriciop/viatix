@@ -13,17 +13,19 @@ function Listado(idSalida){
 
     const dataArray=useDetalleData(idSalida);
     const tablaDatos = dataArray.props.children[0];
+    const dialogoDelete=dataArray.props.children[1];
+    const dialogoAlerta=dataArray.props.children[4];
     const columns = [
-        { name: "idEmpleado", headerName: "ID", align: "left" },
-        { name: "dni", headerName: "DNI", align: "left" },
+        { name: "idEmpleadoSalida", headerName: "ID", align: "left" },
+        { name: "dni", headerName: "IDENTIFICACIÓN", align: "left" },
         { name: "nombre", headerName: "Nombre", align: "left" },
         { name: "apellido", headerName: "Apellido", align: "left" },
-        { name: "username", headerName: "Correo", align: "left" },
+        // { name: "username", headerName: "Correo", align: "left" },
         //  { name: "password", headerName: "Contraseña", align: "left" },
         { name: "departamento", headerName: "Departamento", align: "left" },
         // { name: "enabled", headerName: "Enable", align: "left" },
         // { name: "departamento", headerName: "Departamento", align: "left" },
-        { name: "role", headerName: "Rol", align: "left" },
+    //    { name: "role", headerName: "Rol", align: "left" },
         { name: "action", headerName: "Acciones", align: "center" },
         // Agrega otras columnas según sea necesario
     ];
@@ -31,7 +33,8 @@ function Listado(idSalida){
     return(
 
         <SoftBox py={3}>
-            {/*{dialogoOk}*/}
+            {dialogoAlerta}
+            {dialogoDelete}
             <SoftBox mb={3}>
 
                 <Card>
@@ -62,6 +65,7 @@ function Detalle(){
 
     return(
         <DashboardLayout>
+
             <Header idSalida={idSalida}/>
             <Listado idSalida={idSalida}/>
             <Footer/>
