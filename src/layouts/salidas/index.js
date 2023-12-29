@@ -100,8 +100,8 @@ function CrearSalida({setReloadListado}){
                     fechaRegreso: editFields.fechaRegreso,
                     gastoEstimado:editFields.gastoEstimado,
                     ciudadOrigen:editFields.ciudadOrigen,
-                    ciudadDestino:editFields.ciudadDestino
-
+                    ciudadDestino:editFields.ciudadDestino,
+                    estado:true
                     //categoriaId:editFields.categoria,
 
                 }),
@@ -248,7 +248,7 @@ function Listado({reloadListado,setReloadListado}){
     const tablaDatos = dataArray.props.children[0];
     const dialogoAsignar=dataArray.props.children[1]
     const dialogoOk=dataArray.props.children[2]
-
+    const dialogoDelete=dataArray.props.children[3]
     //  console.log(tablaDatos);
     // const dialogoAgregar=dataArray.props.children[1];
     const columns = [
@@ -271,6 +271,7 @@ return(
 
     <SoftBox py={3}>
         {dialogoOk}
+        {dialogoDelete}
     <SoftBox mb={3}>
 
         <Card>

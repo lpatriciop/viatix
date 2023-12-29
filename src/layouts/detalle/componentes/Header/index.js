@@ -1,26 +1,9 @@
-/**
- =========================================================
- * Soft UI Dashboard React - v4.0.1
- =========================================================
-
- * Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
- * Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
- Coded by www.creative-tim.com
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- */
-
 import { useState, useEffect } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -30,46 +13,48 @@ import SoftAvatar from "components/SoftAvatar";
 // Soft UI Dashboard React examples
 import DashboardNavbar from "viaticos/Navbars/DashboardNavbar";
 
-// Soft UI Dashboard React icons
-import Cube from "viaticos/Icons/Cube";
-import Document from "viaticos/Icons/Document";
-import Settings from "viaticos/Icons/Settings";
-
-// Soft UI Dashboard React base styles
-import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
 import imagenSalidas from "assets/images/salidas.jpg";
 import curved0 from "assets/images/curved-images/curved-6.jpg";
+
+
 import PropTypes from 'prop-types';
+import {API_URL} from "../../../../config";
+import {format} from "date-fns";
+import {Check, CheckCircle, Dangerous} from "@mui/icons-material";
+const token = localStorage.getItem("token");
 Header.propTypes = {
-    descripcion: PropTypes.string.isRequired,
+    idSalida: PropTypes.string.isRequired,
 };
-function Header({descripcion}) {
-    const [tabsOrientation, setTabsOrientation] = useState("horizontal");
-    const [tabValue, setTabValue] = useState(0);
 
-    useEffect(() => {
-        // A function that sets the orientation state of the tabs.
-        function handleTabsOrientation() {
-            return window.innerWidth < breakpoints.values.sm
-                ? setTabsOrientation("vertical")
-                : setTabsOrientation("horizontal");
+function Header({idSalida}) {
+
+    const SalidaDetalle = async ()=>{
+        try {
+            const response = await fetch(`${API_URL}/salidas/${idSalida}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setSalida(data);
+
+            } else {
+                console.error('Error fetching data');
+            }
+        }catch (error){
+            console.error('Error fetching data:', error);
         }
+    };
+    useEffect(()=>{
+          SalidaDetalle();
 
-        /**
-         The event listener that's calling the handleTabsOrientation function when resizing the window.
-         */
-        window.addEventListener("resize", handleTabsOrientation);
-
-        // Call the handleTabsOrientation function to set the state with the initial value.
-        handleTabsOrientation();
-
-        // Remove event listener on cleanup
-        return () => window.removeEventListener("resize", handleTabsOrientation);
-    }, [tabsOrientation]);
-
-    const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+     },[idSalida])
+    const [salida, setSalida] = useState([]);
+    if(salida.length!=0)
 
     return (
         <SoftBox position="relative">
@@ -114,16 +99,65 @@ function Header({descripcion}) {
                         />
                     </Grid>
                     <Grid item>
-                        <SoftBox height="100%" mt={0.5} lineHeight={1}>
+                        <SoftBox height="100%" mt={0.5} lineHeight={1} display="flex" justifyContent="space-between" flexDirection="column">
                             <SoftTypography variant="h5" fontWeight="medium">
-                                Salidas
+                                {salida.descripcionSalida}
                             </SoftTypography>
-                            <SoftTypography variant="button" color="text" fontWeight="medium">
-                                {descripcion}
+                            <SoftTypography variant="h6" fontWeight="medium">
+                                <Grid container spacing={1}>
+                                    <Grid item xs={6}>
+                                        ORIGEN:
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <SoftTypography variant="button">{salida.ciudadOrigen.nombreCiudad}</SoftTypography>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        FECHA SALIDA:
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <SoftTypography variant="button">{format(new Date(salida.fechaSalida), 'dd/MM/yyyy')}</SoftTypography>
+                                    </Grid>
+                                </Grid>
+                            </SoftTypography>
+                            <SoftTypography variant="h6" fontWeight="medium">
+                                <Grid container spacing={1}>
+                                    <Grid item xs={6}>
+                                        DESTINO:
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <SoftTypography variant="button">{salida.ciudadDestino.nombreCiudad}</SoftTypography>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        FECHA REGRESO:
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <SoftTypography variant="button">{format(new Date(salida.fechaRegreso), 'dd/MM/yyyy')}</SoftTypography>
+                                    </Grid>
+                                </Grid>
                             </SoftTypography>
                         </SoftBox>
                     </Grid>
+                    <Grid item mt={3.5}  textAlign="right">
+                        <SoftBox height="80%" shadow>
+                            <SoftTypography variant="h6" fontWeight="medium">
+                                Gasto Estimado
+                            </SoftTypography>
+                            <SoftTypography variant="h5">
+                                {salida.gastoEstimado.toLocaleString("es-ES", {
+                                    style: "currency",
+                                    currency: "USD",
+                                })}
+                            </SoftTypography>
+                            <SoftTypography variant="h6" fontWeight="medium">
+                                ESTADO
+                            </SoftTypography>
 
+
+                            <SoftTypography variant="h5">
+                                {salida.estado ?<p title="Activo"><CheckCircle  color="success" fontSize="large" /></p>  : <p title="Inactivo"><Dangerous  color="error" fontSize="large" /></p> }
+                            </SoftTypography>
+                        </SoftBox>
+                    </Grid>
                 </Grid>
             </Card>
         </SoftBox>

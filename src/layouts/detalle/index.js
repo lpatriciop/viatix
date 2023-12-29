@@ -6,7 +6,9 @@ import useDetalleData from "./data/detalleTableData";
 import SoftBox from "../../components/SoftBox";
 import {Button, Card, TextField} from "@mui/material";
 import Table from "viaticos/Tables/Table";
-
+import {API_URL} from "../../config";
+import { useState, useEffect } from "react";
+const token = localStorage.getItem("token");
 function Listado(idSalida){
 
     const dataArray=useDetalleData(idSalida);
@@ -55,15 +57,12 @@ function Listado(idSalida){
         </SoftBox>);
 }
 
-
-
-
-
 function Detalle(){
-    const { idSalida } = useParams();
+    const {idSalida}=useParams();
+
     return(
         <DashboardLayout>
-            <Header descripcion={`Descripcion de la Salida: ${idSalida}`}/>
+            <Header idSalida={idSalida}/>
             <Listado idSalida={idSalida}/>
             <Footer/>
         </DashboardLayout>

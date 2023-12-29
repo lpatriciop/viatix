@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-import {  ArrowForward,  CheckBox,  GridOn,} from "@mui/icons-material";
+import {ArrowForward, CheckBox, CheckCircle, Dangerous, GridOn, Recycling, Warning,} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
 import {InputLabel, MenuItem,TextField} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -24,9 +24,44 @@ function useSalidasData(reload) {
   const token = localStorage.getItem("token");
   const [deleteItemId, setDeleteItemId] = useState(false);
   //ELIMINAR
-  const handleDelete = async (id) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const handleDelete = async (e,id) => {
+    e.preventDefault();
     setDeleteItemId(id);
     setDeleteDialogOpen(true);
+  };
+  const handleCancelDelete = () => {
+    setDeleteItemId(null);
+    setDeleteDialogOpen(false);
+  };
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await fetch(`${API_URL}/salidas/${deleteItemId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+      //  console.log(`Item con ID ${deleteItemId} eliminada exitosamente`);
+
+        setMensajeAlerta(`Salida con ID ${deleteItemId} eliminada exitosamente`);
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
+        fetchData();
+      } else {
+        setMensajeAlerta("Error al eliminar salida, no se puede eliminar salida con empleados asignados.");
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
+      //  console.error('Error al eliminar item');
+      }
+    } catch (error) {
+      console.error('Error al procesar la solicitud de eliminación:', error);
+    } finally {
+      setDeleteItemId(null);
+      setDeleteDialogOpen(false);
+    }
   };
 //ASIGNAR
   const [asignarAlerta, setAsignarAlerta] = useState(false);
@@ -98,33 +133,7 @@ function useSalidasData(reload) {
 
   //FIN ASIGNAR
   const endpointComplemento = API_URL + "/empleados";
-  const handleCancelDelete = () => {
-    setDeleteItemId(null);
-    setDeleteDialogOpen(false);
-  };
 
-  const handleConfirmDelete = async () => {
-    try {
-      const response = await fetch(`${API_URL}/salidas/${deleteItemId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        console.log(`Item con ID ${deleteItemId} eliminada exitosamente`);
-        fetchData();
-      } else {
-        console.error('Error al eliminar item');
-      }
-    } catch (error) {
-      console.error('Error al procesar la solicitud de eliminación:', error);
-    } finally {
-      setDeleteItemId(null);
-      setDeleteDialogOpen(false);
-    }
-  };
   const handleEdit = (item) => {
 
     setEditItemId(item);
@@ -145,9 +154,7 @@ function useSalidasData(reload) {
     setEditItemId(item)
     setEditDialogoAsignar(true)
   }
-  const  handleClickDetalle=(e,item)=>{
 
-  }
   const fetchData= async ()=> {
     try {
       const response = await fetch(endpoint+"?orderBy=fechaSalidaD", {
@@ -167,10 +174,23 @@ function useSalidasData(reload) {
           ciudadDestino: item.ciudadDestino.nombreCiudad,
           fechaSalida: new Date(item.fechaSalida[0], item.fechaSalida[1] - 1, item.fechaSalida[2]).toLocaleDateString(),
           fechaRegreso: new Date(item.fechaRegreso[0], item.fechaRegreso[1] - 1, item.fechaRegreso[2]).toLocaleDateString(),
-          gastoEstimado: item.gastoEstimado,
-          estado: <CheckBox checked={item.estado} />,
+          gastoEstimado:   item.gastoEstimado.toLocaleString("es-ES", {
+              style: "currency",
+              currency: "USD",
+            }),
+          estado:  item.estado ?<p title="Activo"><CheckCircle  color="success" fontSize="small" /></p>  : <p title="Inactivo"><Dangerous  color="error" fontSize="small" /></p> ,
           action: (
               <>
+                <SoftTypography
+                    component="a"
+                    href="#"
+                    variant="caption"
+                    color="error"
+                    fontWeight="medium"
+                    onClick={(e) => handleDelete(e,item.idSalida)}
+                >
+                  <DeleteIcon />&nbsp;Eliminar&nbsp;
+                </SoftTypography>
                 <SoftTypography
                     component="a"
                     href={`#/detalle/${item.idSalida}`}
@@ -233,7 +253,7 @@ function useSalidasData(reload) {
           }));
 
           setEmpleados(empleadosConNombreCompleto);
-
+          setEmpleado(empleadosConNombreCompleto[0]);
         } else {
           setEmpleados([{"idEmpleado": "-1", "nombreCompleto": "No existen empleados"}]);
         }
@@ -246,7 +266,7 @@ function useSalidasData(reload) {
   };
   useEffect(() => {
     fetchDataComplemento();
-    //  console.log(newDialogOpen,departamentos);
+
   }, [editDialogoAsignar]);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -269,9 +289,10 @@ function useSalidasData(reload) {
       </DialogTitle>
       <DialogContent>
         <InputLabel id="complemento-label">SALIDA:</InputLabel>
-        <SoftTypography>{editItemId.descripcionSalida}</SoftTypography>
+        {editItemId.length!=0&&(<SoftTypography>{editItemId.descripcionSalida}</SoftTypography>)}
         <InputLabel >Asignar Empleado:</InputLabel>
         <br/>
+        {/*{empleados.length!=0 &&(*/}
         <Autocomplete
             options={empleados}
             getOptionLabel={(empleado) => empleado.nombreCompleto}
@@ -279,7 +300,7 @@ function useSalidasData(reload) {
             onChange={(event,newValue)=>{setEmpleado(newValue)}}
             renderInput={(params) => <TextField {...params} label="Empleados" />}
             fullWidth
-        />
+        />        {/*)}*/}
 
 
       </DialogContent>
@@ -306,6 +327,40 @@ function useSalidasData(reload) {
     {asignarAlerta && (<Alert severity={tipoAlerta} >
       {mensajeAlerta}
     </Alert>)}
+    <Dialog
+        open={deleteDialogOpen}
+        onClose={handleCancelDelete}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        <Warning color="warning" style={{ marginRight: 8 }} />
+        Confirmar eliminación
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          ¿Está seguro de eliminar este ítem?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <SoftButton
+            onClick={handleCancelDelete}
+            variant="gradient"
+            color="secondary"
+            fontWeight="medium"
+        >
+          Cancelar
+        </SoftButton >
+        <SoftButton
+            onClick={handleConfirmDelete}
+            variant="gradient"
+            color="error"
+            fontWeight="medium"
+        >
+          Eliminar
+        </SoftButton >
+      </DialogActions>
+    </Dialog>
   </>);
 }
 
