@@ -8,7 +8,8 @@ import {Button, Card, TextField} from "@mui/material";
 import Table from "viaticos/Tables/Table";
 import {API_URL} from "../../config";
 import { useState, useEffect } from "react";
-const token = localStorage.getItem("token");
+import Table2 from "../../viaticos/Tables/Table2";
+
 function Listado(idSalida){
 
     const dataArray=useDetalleData(idSalida);
@@ -19,13 +20,8 @@ function Listado(idSalida){
         { name: "idEmpleadoSalida", headerName: "ID", align: "left" },
         { name: "dni", headerName: "IDENTIFICACIÓN", align: "left" },
         { name: "nombre", headerName: "Nombre", align: "left" },
-        { name: "apellido", headerName: "Apellido", align: "left" },
-        // { name: "username", headerName: "Correo", align: "left" },
-        //  { name: "password", headerName: "Contraseña", align: "left" },
+         { name: "apellido", headerName: "Apellido", align: "left" },
         { name: "departamento", headerName: "Departamento", align: "left" },
-        // { name: "enabled", headerName: "Enable", align: "left" },
-        // { name: "departamento", headerName: "Departamento", align: "left" },
-    //    { name: "role", headerName: "Rol", align: "left" },
         { name: "action", headerName: "Acciones", align: "center" },
         // Agrega otras columnas según sea necesario
     ];
@@ -51,7 +47,7 @@ function Listado(idSalida){
                     >
                         {/*{dialogoAsignar}*/}
 
-                        <Table columns={columns} rows={tablaDatos} />
+                        <Table2 columns={columns} rows={tablaDatos} />
 
 
                     </SoftBox>

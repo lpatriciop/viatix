@@ -1,23 +1,3 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v3.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-pro-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/**
- * The base colors for the Soft UI Dashboard React.
- * You can add new color using this file.
- * You can customized the colors for the entire Soft UI Dashboard React using thie file.
- */
 
 const colors = {
   background: {
@@ -45,12 +25,12 @@ const colors = {
   },
 
   primary: {
-    main: "#cb0c9f",
+    main: "#3f6da1",
     focus: "#ad0a87",
   },
 
   secondary: {
-    main: "#8392ab",
+    main: "#4f5a70",
     focus: "#96a2b8",
   },
 
@@ -83,7 +63,10 @@ const colors = {
     main: "#344767",
     focus: "#344767",
   },
-
+  monto: {
+    main: "#2a0cd2",
+    state: "#1326ad",
+  },
   grey: {
     100: "#f8f9fa",
     200: "#e9ecef",
@@ -135,6 +118,10 @@ const colors = {
     dark: {
       main: "#141727",
       state: "#3a416f",
+    },
+    monto: {
+      main: "#2a0cd2",
+      state: "#1326ad",
     },
   },
 

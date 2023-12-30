@@ -23,6 +23,13 @@ import PropTypes from 'prop-types';
 import {API_URL} from "../../../../config";
 import {format} from "date-fns";
 import {Check, CheckCircle, Dangerous} from "@mui/icons-material";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Document from "../../../../viaticos/Icons/Document";
+import Cube from "../../../../viaticos/Icons/Cube";
+import SoftButton from "../../../../components/SoftButton";
+import Divider from "@mui/material/Divider";
 const token = localStorage.getItem("token");
 Header.propTypes = {
     idSalida: PropTypes.string.isRequired,
@@ -157,6 +164,40 @@ function Header({idSalida}) {
                                 {salida.estado ?<p title="Activo"><CheckCircle  color="success" fontSize="large" /></p>  : <p title="Inactivo"><Dangerous  color="error" fontSize="large" /></p> }
                             </SoftTypography>
                         </SoftBox>
+                    </Grid>
+                    <Grid item mt={1.7}  textAlign="right">
+                        <SoftBox height="80%" shadow>
+                            <SoftTypography variant="h6" fontWeight="medium">
+                                Gasto Real
+                            </SoftTypography>
+                            <SoftTypography variant="h5">
+                                {salida.gastoEstimado.toLocaleString("es-ES", {
+                                    style: "currency",
+                                    currency: "USD",
+                                })}
+                            </SoftTypography>
+                            <SoftTypography variant="h6" fontWeight="medium">
+                                DIFERENCIA
+                            </SoftTypography>
+
+
+                            <SoftTypography variant="h5">
+                                {salida.gastoEstimado.toLocaleString("es-ES", {
+                                    style: "currency",
+                                    currency: "USD",
+                                })}
+                            </SoftTypography>
+                        </SoftBox>
+                    </Grid>
+                    <Grid item  mt={3.5} >
+                        <AppBar position="static">
+
+                                <SoftButton color="primary" icon={<Document />} onClick={() => window.location.href = "#/salidas"} >Asignar Empleado</SoftButton>
+                         <Divider/>
+                            <SoftButton color="secondary" icon={<Document />} >Terminar Salida</SoftButton>
+                                {/*<Tab label="Configuración" icon={<Settings />} />*/}
+
+                        </AppBar>
                     </Grid>
                 </Grid>
             </Card>

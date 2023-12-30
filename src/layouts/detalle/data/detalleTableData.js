@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 
-import {Add, ArrowBack, Icecream, PlusOne, Warning} from "@mui/icons-material";
+import {Add, ArrowBack, Description, Icecream, PersonRemove, PlusOne, Warning} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
 import {InputLabel, Select, TextField,MenuItem} from "@mui/material";
 import Alert from "@mui/material/Alert";
@@ -56,7 +56,7 @@ function useDetalleData({idSalida}) {
         //console.log(`Empleado con ID ${deleteItemId} eliminada exitosamente`);
         fetchData();
       } else {
-        setMensajeAlerta("Error al eliminar salida, no se puede eliminar salida con empleados asignados.");
+        setMensajeAlerta("Error al retirar empleado. No se puede si tiene registrados gastos.");
         setTipoAlerta("error");
         setAsignarAlerta(true);
       }
@@ -248,31 +248,33 @@ function useDetalleData({idSalida}) {
       });
       if (response.ok) {
         const fetchedData = await response.json();
+
         const dataWithActions = fetchedData.map(item => ({
           idEmpleadoSalida: item.id,
            dni: item.empleado.dni,
-          nombre: `${item.empleado.nombre} ${item.empleado.apellido}`,
-           apellido: item.empleado.apellido,
-           // username: item.empleado.username,
+          //nombre: `${item.empleado.nombre} ${item.empleado.apellido}`,
+          nombre: item.empleado.nombre,
+          apellido: item.empleado.apellido,
+        //   viatico: item.empleado.username,
            // password: item.empleado.password,
            departamento: item.empleado.departamento.nombreDepartamento,
           // enabled: item.enabled,
         //   role: item.empleado.role,
           action: (
               <>
-                <SoftTypography
-                    component="a"
-                    href="#"
-                    variant="caption"
-                    color="success"
-                    fontWeight="medium"
-                    style={{marginRight: 8}}
-                    onClick={() => handleEdit(item)}
+                {/*<SoftTypography*/}
+                {/*    component="a"*/}
+                {/*    href="#"*/}
+                {/*    variant="caption"*/}
+                {/*    color="success"*/}
+                {/*    fontWeight="medium"*/}
+                {/*    style={{marginRight: 8}}*/}
+                {/*    onClick={() => handleEdit(item)}*/}
 
-                >
-                  <EditIcon/>
-                  &nbsp;Editar
-                </SoftTypography>
+                {/*>*/}
+                {/*  <Description/>*/}
+                {/*  &nbsp;Recibos*/}
+                {/*</SoftTypography>*/}
 
                 <SoftTypography
                     component="a"
@@ -282,7 +284,7 @@ function useDetalleData({idSalida}) {
                     fontWeight="medium"
                     onClick={(e) => handleDelete(e,item.id)}
                 >
-                  <ArrowBack/>&nbsp;Retirar
+                  <PersonRemove/>&nbsp;Retirar
                 </SoftTypography>
               </>
           ),
@@ -298,12 +300,18 @@ function useDetalleData({idSalida}) {
   };
   useEffect(() => {
        fetchData();
-    }, []); // Empty dependency array to run the effect only once
+    }, [idSalida]); // Empty dependency array to run the effect only once
   useEffect(() => {
         fetchDataDepartamento();
    //  console.log(newDialogOpen,departamentos);
   }, [newDialogOpen]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAsignarAlerta(false);
+    }, 3000); // 3000 milisegundos = 3 segundos
 
+    return () => clearTimeout(timer);
+  }, [asignarAlerta]);
   //pass
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const validatePassword = () => {

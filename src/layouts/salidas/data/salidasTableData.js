@@ -10,11 +10,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-import {ArrowForward, CheckBox, CheckCircle, Dangerous, GridOn, Recycling, Warning,} from "@mui/icons-material";
+import {
+  ArrowForward,
+  CheckBox,
+  CheckCircle,
+  Dangerous,
+  GridOn,
+  PersonAdd,
+  Recycling,
+  Warning,
+} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
-import {InputLabel, MenuItem,TextField} from "@mui/material";
+import {IconButton, InputLabel, MenuItem, TextField} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Alert from '@mui/material/Alert';
+import Button from "@mui/material/Button";
 
 
 function useSalidasData(reload) {
@@ -181,40 +191,26 @@ function useSalidasData(reload) {
           estado:  item.estado ?<p title="Activo"><CheckCircle  color="success" fontSize="small" /></p>  : <p title="Inactivo"><Dangerous  color="error" fontSize="small" /></p> ,
           action: (
               <>
-                <SoftTypography
-                    component="a"
-                    href="#"
-                    variant="caption"
-                    color="error"
-                    fontWeight="medium"
-                    onClick={(e) => handleDelete(e,item.idSalida)}
-                >
-                  <DeleteIcon />&nbsp;Eliminar&nbsp;
-                </SoftTypography>
-                <SoftTypography
-                    component="a"
-                    href={`#/detalle/${item.idSalida}`}
-                    variant="caption"
-                    color="success"
-                    fontWeight="medium"
-                    style={{marginRight: 8}}
-                   // onClick={(e) => handleClickDetalle(e,item)}
-
-                >
-                  <GridOn/>
-                  &nbsp;Detalles
-                </SoftTypography>
-
-                <SoftTypography
-                    component="a"
-                    href="#"
-                    variant="caption"
-                    color="secondary"
-                    fontWeight="medium"
+                <IconButton
                     onClick={(e) => handleClickAsignar(e,item)}
-                >
-                  <ArrowForward/>&nbsp;Asignar
-                </SoftTypography>
+                    title="Asignar Empleado"
+                    size="small"
+                ><PersonAdd color="primary"/>
+                </IconButton>
+                <IconButton
+                    href={`#/detalle/${item.idSalida}`}
+                    style={{marginRight: 8}}
+                    size="small"
+                   // onClick={(e) => handleClickDetalle(e,item)}
+                    title="Ir a detalle..."
+                ><GridOn color="success"/>
+                </IconButton>
+                <IconButton
+                    onClick={(e) => handleDelete(e,item.idSalida)}
+                    title="Eliminar"
+                    size="small"
+                ><DeleteIcon  color="error"/>
+                </IconButton>
               </>
           ),
         }));
