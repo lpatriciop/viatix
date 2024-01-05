@@ -14,7 +14,7 @@
  */
 
 import { useMemo } from "react";
-
+import { useState } from "react";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
@@ -22,7 +22,7 @@ import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 
 // @mui material components
-import { Table as MuiTable } from "@mui/material";
+import {Table as MuiTable, TablePagination} from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
@@ -38,6 +38,15 @@ import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";
 
 function Table({ columns, rows }) {
+
+  //paginacion>
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = rows.slice(indexOfFirstRow, indexOfLastRow);
+
   const { light } = colors;
   const { size, fontWeightBold } = typography;
   const { borderWidth } = borders;
@@ -78,7 +87,8 @@ function Table({ columns, rows }) {
     );
   });
 
-  const renderRows = rows.map((row, key) => {
+  //const renderRows = rows.map((row, key) => {
+    const renderRows = currentRows.map((row, key) => {
     const rowKey = `row-${key}`;
 
     const tableRow = columns.map(({ name, align }) => {
@@ -137,10 +147,29 @@ function Table({ columns, rows }) {
                 <TableRow>{renderColumns}</TableRow>
               </SoftBox>
               <TableBody>{renderRows}</TableBody>
+
             </MuiTable>
+            <TablePagination
+                rowsPerPageOptions={[]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={currentPage - 1}
+                // onPageChange={(event, newPage) => setCurrentPage(newPage + 1)}
+                onPageChange={(event, newPage) => {
+                  console.log("Nueva página: ", newPage + 1);
+                  setCurrentPage(newPage + 1);
+                  console.log(currentPage)
+                }}
+                onRowsPerPageChange={(event) => {
+                  setRowsPerPage(parseInt(event.target.value, 10));
+                  setCurrentPage(1);
+                }}
+            />
           </TableContainer>
+
       ),
-      [columns, rows]
+      [columns, rows,currentPage,rowsPerPage]
   );
 }
 

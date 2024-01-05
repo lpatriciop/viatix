@@ -8,7 +8,7 @@ import {
     TableContainer,
     TableRow,
     TableCell,
-    IconButton
+    IconButton, TablePagination
 } from "@mui/material";
 import {ExpandMore, ExpandLess, Web, TravelExplore, Map} from "@mui/icons-material";
 
@@ -23,7 +23,13 @@ import SoftButton from "../../../components/SoftButton";
 const token = localStorage.getItem("token");
 
 function Table2({ columns, rows }) {
+    //paginacion>
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = rows.slice(indexOfFirstRow, indexOfLastRow);
 //GEOCODING INVERSE:
     const getReverseGeocoding = async (ubicacion) => {
 
@@ -206,7 +212,7 @@ function Table2({ columns, rows }) {
         </>
         );
     };
-    const renderRows = rows.map((row, key) => {
+    const renderRows = currentRows.map((row, key) => {
         const isRowExpanded = expandedRows.includes(key);
       //  const rowKey = `row-${key}`;
 
@@ -281,6 +287,23 @@ function Table2({ columns, rows }) {
                 </SoftBox>
                 <TableBody>{renderRows}</TableBody>
             </MuiTable>
+            <TablePagination
+                rowsPerPageOptions={[]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={currentPage - 1}
+                // onPageChange={(event, newPage) => setCurrentPage(newPage + 1)}
+                onPageChange={(event, newPage) => {
+                    console.log("Nueva página: ", newPage + 1);
+                    setCurrentPage(newPage + 1);
+                    console.log(currentPage)
+                }}
+                onRowsPerPageChange={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setCurrentPage(1);
+                }}
+            />
         </TableContainer>
     );
 }
