@@ -14,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import {Add, Icecream, PlusOne, Warning} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
 import {TextField} from "@mui/material";
+import Alert from "@mui/material/Alert";
 
 
 
@@ -34,7 +35,8 @@ function useCategoriasData() {
   const token = localStorage.getItem("token");
 
 //ELIMINAR
-  const handleDelete = async (id) => {
+  const handleDelete = async (e,id) => {
+    e.preventDefault();
     setDeleteItemId(id);
     setDeleteDialogOpen(true);
   };
@@ -52,9 +54,16 @@ function useCategoriasData() {
       });
 
       if (response.ok) {
-        console.log(`Categoría con ID ${deleteItemId} eliminada exitosamente`);
+        //console.log(`Categoría con ID ${deleteItemId} eliminada exitosamente`);
+        setMensajeAlerta(`Categoría eliminada exitosamente`);
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
         fetchData();
       } else {
+        setMensajeAlerta("Error al eliminar la categoría. No se puede eliminar si está en uso.");
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
+
         console.error('Error al eliminar la categoría');
       }
     } catch (error) {
@@ -66,8 +75,8 @@ function useCategoriasData() {
   };
 // FIN ELIMINAR
 //EDITAR
-  const handleEdit = (item) => {
-
+  const handleEdit = (e,item) => {
+    e.preventDefault();
     setEditItemId(item);
     setCategoriaValue(item.nombreCategoria);
     setEditDialogOpen(true);
@@ -97,10 +106,14 @@ function useCategoriasData() {
       });
 
       if (response.ok) {
-        console.log(`Categoría con ID ${id} editada exitosamente`);
+       // console.log(`Categoría con ID ${id} editada exitosamente`);
         // Actualiza el estado o vuelve a cargar los datos después de la edición
+        setMensajeAlerta(`Categoría editada exitosamente`);
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
         fetchData();
       } else {
+
         console.error('Error al editar la categoría');
       }
     } catch (error) {
@@ -143,8 +156,10 @@ function useCategoriasData() {
       });
 
       if (response.ok) {
-        console.log(`Categoría  exitosamente`);
-        // Actualiza el estado o vuelve a cargar los datos después de la edición
+        // console.log(`Categoría  exitosamente`);
+        setMensajeAlerta(`Categoría creada exitosamente`);
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
         fetchData();
       } else {
         console.error('Error al editar la categoría');
@@ -180,7 +195,7 @@ function useCategoriasData() {
                     color="success"
                     fontWeight="medium"
                     style={{ marginRight: 8 }}
-                    onClick={()=>handleEdit(item)}
+                    onClick={(e)=>handleEdit(e,item)}
 
                 >
                   <EditIcon />
@@ -193,7 +208,7 @@ function useCategoriasData() {
                     variant="caption"
                     color="error"
                     fontWeight="medium"
-                    onClick={()=>handleDelete(item.idCategoria)}
+                    onClick={(e)=>handleDelete(e,item.idCategoria)}
                 >
                   <DeleteIcon />&nbsp;Eliminar
                 </SoftTypography>
@@ -214,12 +229,20 @@ function useCategoriasData() {
     fetchData();
 
   }, []); // Empty dependency array to run the effect only once
+  const [asignarAlerta, setAsignarAlerta] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState('OK');
+  const [tipoAlerta, setTipoAlerta] = useState('success');
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAsignarAlerta(false);
+    }, 3000); // 3000 milisegundos = 3 segundos
 
+    return () => clearTimeout(timer);
+  }, [asignarAlerta]);
 //  return data;
   return (
       <>
         {data}
-
         <Dialog
             open={deleteDialogOpen}
             onClose={handleCancelDelete}
@@ -340,6 +363,9 @@ function useCategoriasData() {
         <SoftButton variant="gradient" color="dark"  onClick={handleNew}>
         <Add /> &nbsp;Nueva Categoría
         </SoftButton>
+        {asignarAlerta && (<Alert severity={tipoAlerta} >
+          {mensajeAlerta}
+        </Alert>)}
       </>
   );
 }

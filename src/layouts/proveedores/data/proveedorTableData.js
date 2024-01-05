@@ -14,6 +14,11 @@ import DialogActions from '@mui/material/DialogActions';
 import {Add, Icecream, PlusOne, Warning} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
 import {InputLabel, Select, TextField,MenuItem} from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import Alert from "@mui/material/Alert";
+import Separator from "../../authentication/components/Separator";
+import {Line} from "react-chartjs-2";
+import Divider from "@mui/material/Divider";
 
 
 
@@ -26,7 +31,8 @@ function useProveedorData() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(false);
   //ELIMINAR
-  const handleDelete = async (id) => {
+  const handleDelete = async (e,id) => {
+    e.preventDefault();
     setDeleteItemId(id);
     setDeleteDialogOpen(true);
   };
@@ -44,10 +50,15 @@ function useProveedorData() {
       });
 
       if (response.ok) {
-        console.log(`Item con ID ${deleteItemId} eliminada exitosamente`);
+        setMensajeAlerta(`Proveedor Eliminado Satisfactoriamente`)
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
+        //console.log(`Item con ID ${deleteItemId} eliminada exitosamente`);
         fetchData();
       } else {
-        console.error('Error al eliminar item');
+        setMensajeAlerta(`Error al eliminar Proveedor, es posible que esté siendo utilizada por un viático.`)
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
       }
     } catch (error) {
       console.error('Error al procesar la solicitud de eliminación:', error);
@@ -61,27 +72,21 @@ function useProveedorData() {
   const [newDialogOpen, setNewDialogOpen] = useState(false);
   const [newItemId, setNewItemId] = useState(null);
   const [categorias, setCategorias] = useState([]);
-  const endpointComplemento = API_URL + "/categorias";
+
   //EDITAR
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
-  const [editFields, setEditFields] = useState({
-    ruc: "",
-    nombreProveedor: "",
-    descripcionProveedor: "",
-    categoria: "",
-    // Otros campos de edición si los hay
-  });
+  const [editFields, setEditFields] = useState([]);
 
-  const handleEdit = (item) => {
-
+  const handleEdit = (e,item) => {
+    e.preventDefault();
     setEditItemId(item);
     setEditFields({
       ruc: item.ruc,
       nombreProveedor: item.nombreProveedor,
       descripcionProveedor: item.descripcionProveedor,
-      categoria: item.categoria.nombreCategoria,
+      categoria: item.categoria,
     });
 
     setEditDialogOpen(true);
@@ -111,11 +116,16 @@ function useProveedorData() {
       });
 
       if (response.ok) {
-        console.log(`Item con ID ${id.idProveedor} editado exitosamente`);
+        setMensajeAlerta(`Proveedor editado Satisfactoriamente`)
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
+   //     console.log(`Item con ID ${id.idProveedor} editado exitosamente`);
         // Actualiza el estado o vuelve a cargar los datos después de la edición
         fetchData();
       } else {
-        console.error('Error al editar proveedor');
+        setMensajeAlerta(`Error al editar Proveedor`)
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
       }
     } catch (error) {
       console.error('Error al procesar la solicitud de edición:', error);
@@ -127,15 +137,16 @@ function useProveedorData() {
 
 
   const handleNew = (item) => {
+
     setNewItemId(item);
-    setNewDialogOpen(true);
+
     setEditFields({
       ruc: "",
       nombreProveedor: "",
       descripcionProveedor: "",
-      categoria: categorias.length > 0 ? categorias[0].nombreCategoria : "",
-    })
-
+      categoria: null,
+    });
+    setNewDialogOpen(true);
   };
   const handleCancelNew = () => {
     setNewItemId(null);
@@ -152,12 +163,15 @@ function useProveedorData() {
 
 
       ) {
-        setError('Por favor, complete todos los campos obligatorios.');
+
+        setMensajeAlerta("Por favor, complete todos los campos obligatorios.");
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
         return;
        }
 
       // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
-      const response = await fetch(`${API_URL}/proveedores?categoriaId=${editFields.categoria}`, {
+      const response = await fetch(`${API_URL}/proveedores?categoriaId=${editFields.categoria.idCategoria}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,17 +182,22 @@ function useProveedorData() {
           ruc: editFields.ruc,
           nombreProveedor:editFields.nombreProveedor,
           descripcionProveedor: editFields.descripcionProveedor,
-          //categoriaId:editFields.categoria,
+          categoria:editFields.categoria,
 
         }),
       });
 
       if (response.ok) {
-        console.log(`Item creado  exitosamente`);
+        setMensajeAlerta(`Proveedor creado Satisfactoriamente.`)
+        setTipoAlerta("success");
+        setAsignarAlerta(true);
+
         // Actualiza el estado o vuelve a cargar los datos después de la edición
         fetchData();
       } else {
-        console.error('Error al editar el item');
+        setMensajeAlerta(`Error al asignar al crear nuevo Proveedor}`)
+        setTipoAlerta("error");
+        setAsignarAlerta(true);
       }
     } catch (error) {
       console.error('Error al procesar la solicitud de edición:', error);
@@ -188,6 +207,7 @@ function useProveedorData() {
     }
     setNewDialogOpen(false);
   };
+  const endpointComplemento = API_URL + "/categorias";
   const fetchDataComplemento=async()=>{
     try {
       const response=await fetch(endpointComplemento,
@@ -197,8 +217,11 @@ function useProveedorData() {
               Authorization: `Bearer ${token}`,
             },
           });
+
       if(response.ok){
+
         const dataComp=await response.json();
+
         dataComp.length>0?setCategorias(dataComp)
             :setCategorias([{"idCategoria":"-1","nombreCategoria":"No existen categorias"}]);
 
@@ -236,7 +259,7 @@ function useProveedorData() {
                     color="success"
                     fontWeight="medium"
                     style={{marginRight: 8}}
-                    onClick={() => handleEdit(item)}
+                    onClick={(e) => handleEdit(e,item)}
 
                 >
                   <EditIcon/>
@@ -249,7 +272,7 @@ function useProveedorData() {
                     variant="caption"
                     color="error"
                     fontWeight="medium"
-                    onClick={() => handleDelete(item.idEmpleado)}
+                    onClick={(e) => handleDelete(e,item.idProveedor)}
                 >
                   <DeleteIcon/>&nbsp;Eliminar
                 </SoftTypography>
@@ -270,8 +293,18 @@ function useProveedorData() {
     }, []); // Empty dependency array to run the effect only once
   useEffect(() => {
         fetchDataComplemento();
-   //  console.log(newDialogOpen,departamentos);
+
   }, [newDialogOpen,editDialogOpen]);
+  const [asignarAlerta, setAsignarAlerta] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState('OK');
+  const [tipoAlerta, setTipoAlerta] = useState('success');
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAsignarAlerta(false);
+    }, 3000); // 3000 milisegundos = 3 segundos
+
+    return () => clearTimeout(timer);
+  }, [asignarAlerta]);
 
 
   return (<>
@@ -334,20 +367,15 @@ function useProveedorData() {
                        onChange={(e) => setEditFields({...editFields,descripcionProveedor:e.target.value})}
         />
         <InputLabel id="complemento-label">Categoria</InputLabel>
-        <Select
-            labelId="complemento-label"
-            id="complemento"
+
+        <Autocomplete
+            options={categorias}
+            getOptionLabel={(editFields) => editFields.nombreCategoria}
             value={editFields.categoria}
-            onChange={(e) => setEditFields({ ...editFields, categoria: e.target.value })}
+            onChange={(event,newValue)=>setEditFields({ ...editFields, categoria: newValue })}
+            renderInput={(params) => <TextField {...params} label="Categorías" />}
             fullWidth
-            disabled={categorias.length === 0}
-        >
-          {categorias.map((categorias) => (
-              <MenuItem key={categorias.idCategoria} value={categorias.nombreCategoria}>
-                {categorias.nombreCategoria}
-              </MenuItem>
-          ))}
-        </Select>
+        />
 
       </DialogContent>
       <DialogActions>
@@ -380,35 +408,34 @@ function useProveedorData() {
         Crea Nuevo Proveedor
       </DialogTitle>
       <DialogContent>
+        <Divider/>
+
         <TextField     label="RUC"   fullWidth
                        value={editFields.ruc}
                        onChange={(e) => setEditFields({...editFields,ruc:e.target.value})}
         />
+
         <TextField     label="Nombre"   fullWidth
                        value={editFields.nombreProveedor}
                        onChange={(e) => setEditFields({...editFields,nombreProveedor:e.target.value})}
         />
-        <TextField     label="Descripcion"   fullWidth
+
+        <TextField     label="Descripción"   fullWidth
                        value={editFields.descripcionProveedor}
                        onChange={(e) => setEditFields({...editFields,descripcionProveedor:e.target.value})}
         />
-        <InputLabel id="complemento-label">Categoria</InputLabel>
-        <Select
-            labelId="complemento-label"
-            id="complemento"
-//            value={editFields.categoria??"Escoja una categoria"}
-            value={editFields.categoria || ""}
 
-            onChange={(e) => setEditFields({ ...editFields, categoria: e.target.value })}
+        <InputLabel id="complemento-label">Categoría</InputLabel>
+
+        <Autocomplete
+            options={categorias}
+            getOptionLabel={(editFields) => editFields.nombreCategoria}
+            value={editFields.categoria}
+            onChange={(event,newValue)=>setEditFields({ ...editFields, categoria: newValue })}
+            renderInput={(params) => <TextField {...params} label="Categorías" />}
             fullWidth
-            disabled={categorias.length === 0}
-        >
-          {categorias.map((categorias) => (
-              <MenuItem key={categorias.idCategoria} value={categorias.idCategoria}>
-                {categorias.nombreCategoria}
-              </MenuItem>
-          ))}
-        </Select>
+        />
+        <Divider/>
       </DialogContent>
       <DialogContentText style={{ color: 'red' }}>&nbsp;{error}</DialogContentText>
       <DialogActions>
@@ -435,6 +462,9 @@ function useProveedorData() {
     <SoftButton variant="gradient" color="dark"  onClick={handleNew}>
       <Add /> &nbsp;Nuevo
     </SoftButton>
+    {asignarAlerta && (<Alert severity={tipoAlerta} >
+      {mensajeAlerta}
+    </Alert>)}
   </>);
 }
 

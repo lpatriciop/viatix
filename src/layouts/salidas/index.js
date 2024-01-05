@@ -249,6 +249,7 @@ function Listado({reloadListado,setReloadListado}){
     const dialogoAsignar=dataArray.props.children[1]
     const dialogoOk=dataArray.props.children[2]
     const dialogoDelete=dataArray.props.children[3]
+
     //  console.log(tablaDatos);
     // const dialogoAgregar=dataArray.props.children[1];
     const columns = [
@@ -258,7 +259,7 @@ function Listado({reloadListado,setReloadListado}){
         { name: "ciudadDestino", headerName: "Ciudad Destino", align: "left" },
         { name: "fechaSalida", headerName: "Fecha de Salida", align: "left" },
         { name: "fechaRegreso", headerName: "Fecha de Regreso", align: "left" },
-        { name: "gastoEstimado", headerName: "Gasto Estimado", align: "left" },
+        { name: "gastoReal", headerName: "Gasto Registrado", align: "left" },
         { name: "estado", headerName: "Estado", align: "left" },
         { name: "action", headerName: "Acciones", align: "center" },
         // Agrega otras columnas según sea necesario
@@ -272,6 +273,7 @@ return(
     <SoftBox py={3}>
         {dialogoOk}
         {dialogoDelete}
+
     <SoftBox mb={3}>
 
         <Card>

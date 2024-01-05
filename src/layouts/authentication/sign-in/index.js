@@ -38,8 +38,8 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const endpoint = '/auth/signin';
-    console.log(API_URL + endpoint);
+    const endpoint = '/auth/v1/signin';
+   // console.log(API_URL + endpoint);
     try {
       const response = await fetch(API_URL + endpoint, {
         method: 'POST', // Método de la solicitud (puede ser GET, POST, PUT, DELETE, etc.)
@@ -52,7 +52,7 @@ function SignIn() {
       if (response.ok) {
         // Si la respuesta del servidor es exitosa (código de estado 200)
         const data =await response.json();
-        console.log('Inicio de sesión exitoso', data.token);
+
         localStorage.setItem("token",data.token);
         // Redirect to /dashboard
         navigate("/dashboard");

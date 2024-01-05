@@ -166,6 +166,7 @@ function useSalidasData(reload) {
   }
 
   const fetchData= async ()=> {
+
     try {
       const response = await fetch(endpoint+"?orderBy=fechaSalidaD", {
         method: 'POST',
@@ -184,7 +185,7 @@ function useSalidasData(reload) {
           ciudadDestino: item.ciudadDestino.nombreCiudad,
           fechaSalida: new Date(item.fechaSalida[0], item.fechaSalida[1] - 1, item.fechaSalida[2]).toLocaleDateString(),
           fechaRegreso: new Date(item.fechaRegreso[0], item.fechaRegreso[1] - 1, item.fechaRegreso[2]).toLocaleDateString(),
-          gastoEstimado:   item.gastoEstimado.toLocaleString("es-ES", {
+          gastoReal:   item.gastoReal.toLocaleString("es-ES", {
               style: "currency",
               currency: "USD",
             }),
@@ -195,7 +196,8 @@ function useSalidasData(reload) {
                     onClick={(e) => handleClickAsignar(e,item)}
                     title="Asignar Empleado"
                     size="small"
-                ><PersonAdd color="primary"/>
+                    disabled={!item.estado}
+                ><PersonAdd color={item.estado?"primary":"light"} />
                 </IconButton>
                 <IconButton
                     href={`#/detalle/${item.idSalida}`}

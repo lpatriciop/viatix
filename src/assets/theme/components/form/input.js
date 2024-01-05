@@ -38,7 +38,7 @@ const input = {
 
     input: {
       height: pxToRem(22),
-      width: "max-content !important",
+      width: "100% !important",
     },
 
     inputSizeSmall: {

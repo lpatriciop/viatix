@@ -237,14 +237,15 @@ function useEmpleadosData() {
         const fetchedData = await response.json();
         const dataWithActions = fetchedData.map(item => ({
           idEmpleado: item.idEmpleado,
-           dni: item.dni,
-          nombre: `${item.nombre} ${item.apellido}`,
-           apellido: item.apellido,
-           username: item.username,
-           password: item.password,
-           departamento: item.departamento.nombreDepartamento,
+          dni: item.dni,
+          // nombre: `${item.nombre} ${item.apellido}`,
+          nombre: `${item.nombre}`,
+          apellido: item.apellido,
+          username: item.username,
+          password: item.password,
+          departamento: item.departamento.nombreDepartamento,
           // enabled: item.enabled,
-           role: item.role,
+          role: item.role,
           action: (
               <>
                 <SoftTypography

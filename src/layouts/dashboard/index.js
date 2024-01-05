@@ -52,50 +52,50 @@ function Dashboard() {
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "limite gasto" }}
-                count="$53,000"
-                percentage={{ color: "success", text: "+55%" }}
-                icon={{ color: "info", component: "paid" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "salidas del mes" }}
-                count="2,300"
-                percentage={{ color: "success", text: "+3%" }}
-                icon={{ color: "info", component: "public" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "empleados" }}
-                count="+3,462"
-                percentage={{ color: "error", text: "-2%" }}
-                icon={{ color: "info", component: "emoji_events" }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <MiniStatisticsCard
-                title={{ text: "gastos" }}
-                count="$103,430"
-                percentage={{ color: "success", text: "+5%" }}
-                icon={{
-                  color: "info",
-                  component: "shopping_cart",
-                }}
-              />
-            </Grid>
-          </Grid>
-        </SoftBox>
-        <SoftBox mb={3}>
-          <Grid container spacing={3}>
             <Grid item xs={12} lg={7}>
               <BuildByDevelopers />
             </Grid>
             <Grid item xs={12} lg={5}>
               <WorkWithTheRockets />
+            </Grid>
+          </Grid>
+        </SoftBox>
+        <SoftBox mb={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                  title={{ text: "limite gasto" }}
+                  count="$53,000"
+                  percentage={{ color: "success", text: "+55%" }}
+                  icon={{ color: "info", component: "paid" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                  title={{ text: "salidas del mes" }}
+                  count="2,300"
+                  percentage={{ color: "success", text: "+3%" }}
+                  icon={{ color: "info", component: "public" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                  title={{ text: "empleados" }}
+                  count="+3,462"
+                  percentage={{ color: "error", text: "-2%" }}
+                  icon={{ color: "info", component: "emoji_events" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} xl={3}>
+              <MiniStatisticsCard
+                  title={{ text: "gastos" }}
+                  count="$103,430"
+                  percentage={{ color: "success", text: "+5%" }}
+                  icon={{
+                    color: "info",
+                    component: "shopping_cart",
+                  }}
+              />
             </Grid>
           </Grid>
         </SoftBox>

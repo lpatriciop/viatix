@@ -9,7 +9,7 @@ import SoftTypography from "components/SoftTypography";
 
 // Images
 import wavesWhite from "assets/images/shapes/waves-white.svg";
-import rocketWhite from "assets/images/illustrations/rocket-white.png";
+import imagenSalidas from "assets/images/salidas.jpg";
 
 function BuildByDevelopers() {
   return (
@@ -32,7 +32,7 @@ Nueva Salida              </SoftTypography>
               </SoftBox>
               <SoftTypography
                 component="a"
-                href="#"
+                href="#/salidas"
                 variant="button"
                 color="text"
                 fontWeight="medium"
@@ -70,7 +70,7 @@ Nueva Salida              </SoftTypography>
               variant="gradient"
             >
               <SoftBox
-                component="img"
+                component="a"
                 src={wavesWhite}
                 alt="waves"
                 display="block"
@@ -78,8 +78,9 @@ Nueva Salida              </SoftTypography>
                 left={0}
                 width="100%"
                 height="100%"
+                href="#/salidas"
               />
-              <SoftBox component="img" src={rocketWhite} alt="rocket" width="100%" pt={3} />
+              <SoftBox component="img" src={imagenSalidas} alt="rocket" width="100%" pt={3} />
             </SoftBox>
           </Grid>
         </Grid>

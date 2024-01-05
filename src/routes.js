@@ -83,16 +83,16 @@ const routes = [
 
 
   { type: "title", title: "Opciones de Sesión", key: "account-pages" },
-  {
-    type: "collapse",
-    name: "Perfil",
-    key: "profile",
-    route: "/profile",
-    icon: <CustomerSupport size="12px" />,
-    component: <Billing  />,
-    noCollapse: true,
-    isPrivate: true,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Perfil",
+  //   key: "profile",
+  //   route: "/profile",
+  //   icon: <CustomerSupport size="12px" />,
+  //   component: <Billing  />,
+  //   noCollapse: true,
+  //   isPrivate: true,
+  // },
   {
     type: "collapse",
     name: "Iniciar Sesión",
@@ -103,16 +103,16 @@ const routes = [
     noCollapse: true,
     isPrivate: false,
   },
-  {
-    type: "collapse",
-    name: "Tablas",
-    key: "tables",
-    route: "/tables",
-    icon: <SpaceShip size="12px" />,
-    component: <Tables />,
-    noCollapse: true,
-    isPrivate: false,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Tablas",
+  //   key: "tables",
+  //   route: "/tables",
+  //   icon: <SpaceShip size="12px" />,
+  //   component: <Tables />,
+  //   noCollapse: true,
+  //   isPrivate: false,
+  // },
   {
     type: "collapse",
     name: "Cerrar Sesión",

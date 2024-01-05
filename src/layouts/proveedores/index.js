@@ -19,6 +19,7 @@ const dataArray=useProveedorData();
     const dialogoEdit = dataArray.props.children[2];
      const dialogoNew = dataArray.props.children[3];
      const botonNew = dataArray.props.children[4];
+    const mensaje=dataArray.props.children[5]
 
     const columns = [
         { name: "idProveedor", headerName: "ID", align: "left" },
@@ -40,6 +41,7 @@ const dataArray=useProveedorData();
             <DashboardNavbar />
             <SoftBox py={3}>
                 <SoftBox mb={3}>
+                    {mensaje}
                     <Card>
                         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                             <SoftTypography variant="h6">Proveedores</SoftTypography>

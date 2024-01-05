@@ -32,7 +32,6 @@ function Listado(idSalida){
             {dialogoAlerta}
             {dialogoDelete}
             <SoftBox mb={3}>
-
                 <Card>
 
                     <SoftBox

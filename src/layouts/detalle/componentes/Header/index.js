@@ -37,6 +37,7 @@ Header.propTypes = {
 
 function Header({idSalida}) {
 
+
     const SalidaDetalle = async ()=>{
         try {
             const response = await fetch(`${API_URL}/salidas/${idSalida}`, {
@@ -56,11 +57,58 @@ function Header({idSalida}) {
             console.error('Error fetching data:', error);
         }
     };
-    useEffect(()=>{
-          SalidaDetalle();
-
-     },[idSalida])
     const [salida, setSalida] = useState([]);
+    const SumarMonto=async ()=>{
+        try {
+            const response = await fetch(`${API_URL}/viaticos/sumarMontos/${idSalida}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setGastoReal(data);
+
+            } else {
+                console.error('Error fetching data');
+            }
+        }catch (error){
+            console.error('Error fetching data:', error);
+        }
+    };
+    const [gastoReal, setGastoReal] = useState([]);
+    const [diferencia, setDiferencia] = useState();
+    useEffect(()=>{
+        SalidaDetalle();
+        SumarMonto();
+
+    },[idSalida]);
+    useEffect(() => {
+        //   console.log(salida.gastoEstimado,gastoReal);
+        setDiferencia(salida.gastoEstimado-gastoReal);
+    }, [gastoReal]);
+    //Terminar Salida
+    const handleTerminarSalida = async () => {
+        try {
+                const responset = await fetch(`${API_URL}/salidas/terminar/${idSalida}`, {
+                method: 'PUT',
+                headers: {
+                         'Authorization': `Bearer ${token}`,
+                },
+            });
+              if (responset.ok) {
+                // Recargar la información del estado aquí
+                SalidaDetalle();
+            } else {
+                console.error("Error al terminar la salida");
+            }
+        } catch (error) {
+            console.error("Error al terminar la salida:", error);
+        }
+    };
+    //si hay datos renderizo...
     if(salida.length!=0)
 
     return (
@@ -171,7 +219,7 @@ function Header({idSalida}) {
                                 Gasto Real
                             </SoftTypography>
                             <SoftTypography variant="h5">
-                                {salida.gastoEstimado.toLocaleString("es-ES", {
+                                {gastoReal.toLocaleString("es-ES", {
                                     style: "currency",
                                     currency: "USD",
                                 })}
@@ -181,8 +229,8 @@ function Header({idSalida}) {
                             </SoftTypography>
 
 
-                            <SoftTypography variant="h5">
-                                {salida.gastoEstimado.toLocaleString("es-ES", {
+                            <SoftTypography variant="h5" color={diferencia < 0 ? "error" : "inherit"}>
+                                {diferencia.toLocaleString("es-ES", {
                                     style: "currency",
                                     currency: "USD",
                                 })}
@@ -194,7 +242,7 @@ function Header({idSalida}) {
 
                                 <SoftButton color="primary" icon={<Document />} onClick={() => window.location.href = "#/salidas"} >Asignar Empleado</SoftButton>
                          <Divider/>
-                            <SoftButton color="secondary" icon={<Document />} >Terminar Salida</SoftButton>
+                            <SoftButton color="secondary" icon={<Document />}  onClick={handleTerminarSalida}>Terminar Salida</SoftButton>
                                 {/*<Tab label="Configuración" icon={<Settings />} />*/}
 
                         </AppBar>

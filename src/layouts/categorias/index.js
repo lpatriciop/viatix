@@ -19,7 +19,7 @@ const categoriasArray=useCategoriasData();
     const dialogoEdit = categoriasArray.props.children[2];
     const dialogoNew = categoriasArray.props.children[3];
     const botonNew = categoriasArray.props.children[4];
-
+    const mensaje=categoriasArray.props.children[5]
     const columns = [
         { name: "idCategoria", headerName: "ID", align: "left" },
         { name: "nombreCategoria", headerName: "CATEGORIA", align: "left" },
@@ -33,8 +33,10 @@ const categoriasArray=useCategoriasData();
             {dialogoDelete}
             {dialogoEdit}
             {dialogoNew}
+
             <DashboardNavbar />
             <SoftBox py={3}>
+                {mensaje}
                 <SoftBox mb={3}>
                     <Card>
                         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
