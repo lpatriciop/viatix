@@ -11,9 +11,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 
-import {Add, Icecream, PlusOne, Warning} from "@mui/icons-material";
+import {
+  Abc, AbcSharp,
+  Add,
+  ArtTrack,
+  AssignmentInd, BrandingWatermark,
+  Email,
+  GridOn,
+  Icecream, Password,
+  Person,
+  PlusOne,
+  Warning
+} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
-import {InputLabel, Select, TextField,MenuItem} from "@mui/material";
+import {InputLabel, Select, TextField, MenuItem, IconButton,InputAdornment} from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 
 
@@ -73,14 +85,14 @@ function useEmpleadosData() {
     // Otros campos de edición si los hay
   });
 
-  const handleEdit = (item) => {
-
+  const handleEdit = (e,item) => {
+    e.preventDefault();
     setEditItemId(item);
     setEditFields({
       nombre: item.nombre,
       username: item.username,
       apellido: item.apellido,
-      departamento: item.departamento,
+      departamento: item.departamento.idDepartamento,
       role:item.role,
       password:item.password,
       dni:item.dni,
@@ -248,30 +260,32 @@ function useEmpleadosData() {
           role: item.role,
           action: (
               <>
-                <SoftTypography
-                    component="a"
-                    href="#"
-                    variant="caption"
-                    color="success"
-                    fontWeight="medium"
+
+                <IconButton
+                  //  href={`#/detalle/${item.id}`}
                     style={{marginRight: 8}}
-                    onClick={() => handleEdit(item)}
+                    size="small"
+                    onClick={(e) => handleEdit(e,item)}
+                    title="Editar Empleado"
+                ><EditIcon color="success"/>
+                </IconButton>
+                <IconButton
+                    href={`#/gastos/${item.idEmpleado}`}
+                    style={{marginRight: 8}}
+                    size="small"
+                    // onClick={(e) => handleClickDetalle(e,item)}
+                    title="Detalle de Gastos"
+                ><ArtTrack color="monto"/>
+                </IconButton>
+                <IconButton
+                    //  href={`#/detalle/${item.id}`}
+                    style={{marginRight: 8}}
+                    size="small"
+                    onClick={(e) => handleDelete(e,item.idEmpleado)}
+                    title="Eliminar Empleado?"
+                ><DeleteIcon color="error"/>
+                </IconButton>
 
-                >
-                  <EditIcon/>
-                  &nbsp;Editar
-                </SoftTypography>
-
-                <SoftTypography
-                    component="a"
-                    href="#"
-                    variant="caption"
-                    color="error"
-                    fontWeight="medium"
-                    onClick={() => handleDelete(item.idEmpleado)}
-                >
-                  <DeleteIcon/>&nbsp;Eliminar
-                </SoftTypography>
               </>
           ),
         }));
@@ -340,26 +354,142 @@ function useEmpleadosData() {
         aria-describedby="edit-dialog-description"
     >
       <DialogTitle id="edit-dialog-title">
-        Editar Empleado
+        <SoftTypography variant="h5" fontWeight="medium">
+        <EditIcon/> Editar Empleado
+        </SoftTypography>
+
+
       </DialogTitle>
+
       <DialogContent>
-        {/* Campo de edición para la categoría */}
-        <TextField     label="Nombre"   fullWidth
-            value={editFields.nombre}
-            onChange={(e) => setEditFields({...editFields,nombre:e.target.value})}
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <TextField
+            label="Cedula"
+            fullWidth
+            value={editFields.dni}
+            required
+            onChange={(e) => setEditFields({ ...editFields, dni: e.target.value })}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <AssignmentInd/>
+                  </InputAdornment>
+              ),
+            }}
         />
-        <TextField     label="Apellido"   fullWidth
-                       value={editFields.apellido}
-                       onChange={(e) => setEditFields({...editFields,apellido:e.target.value})}
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+                label="Nombre"
+                fullWidth
+                value={editFields.nombre}
+                required
+                onChange={(e) => setEditFields({ ...editFields, nombre: e.target.value })}
+                InputProps={{
+                  startAdornment: (
+                      <InputAdornment position="start">
+                        <Abc />
+                      </InputAdornment>
+                  ),
+                }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+                label="Apellido"
+                fullWidth
+                value={editFields.apellido}
+                required
+                onChange={(e) => setEditFields({ ...editFields, apellido: e.target.value })}
+                InputProps={{
+                  startAdornment: (
+                      <InputAdornment position="start">
+                        <AbcSharp />
+                      </InputAdornment>
+                  ),
+                }}
+            />
+          </Grid>
+        </Grid>
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <TextField
+            type="email"
+            label="Correo"   fullWidth
+            value={editFields.username}
+            required
+            onChange={(e) => setEditFields({...editFields,username:e.target.value})}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <Email/>
+                  </InputAdornment>
+              ),
+            }}
         />
-        <TextField     label="Correo"   fullWidth
-                       value={editFields.username}
-                       onChange={(e) => setEditFields({...editFields,username:e.target.value})}
+
+        <SoftTypography variant="caption" fontWeight="medium">Rol</SoftTypography>
+        <Select
+            label="Rol"
+            value={editFields.role}
+            onChange={(e) => setEditFields({ ...editFields, role: e.target.value })}
+            fullWidth
+        >
+          <MenuItem value="USER">Usuario</MenuItem>
+          <MenuItem value="ADMIN">Administrador</MenuItem>
+        </Select>
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <TextField
+            type="password"
+            label="Password"
+            fullWidth
+            required
+            value={editFields.password}
+            onChange={(e) => setEditFields({ ...editFields, password: e.target.value })}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <Password/>
+                  </InputAdornment>
+              ),
+            }}
         />
-        <TextField     label="Rol"   fullWidth
-                       value={editFields.role}
-                       onChange={(e) => setEditFields({...editFields,role:e.target.value})}
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <TextField
+            type="password"
+            label="Confirmar Password"
+            fullWidth
+            required
+            value={editFields.password}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <Password/>
+                  </InputAdornment>
+              ),
+            }}
         />
+        <SoftTypography variant="caption" fontWeight="medium">Departamento</SoftTypography>
+        <Select
+            labelId="departamento-label"
+            id="departamento"
+            value={editFields.departamento}
+            onChange={(e) => setEditFields({ ...editFields, departamento: e.target.value })}
+            fullWidth
+            disabled={departamentos.length === 0}
+        >
+          {departamentos.map((departamento) => (
+              <MenuItem key={departamento.idDepartamento} value={departamento.idDepartamento} selected={editFields.departamento === departamento.idDepartamento}>
+                {departamento.nombreDepartamento}
+              </MenuItem>
+          ))}
+        </Select>
       </DialogContent>
       <DialogActions>
         <SoftButton
@@ -388,33 +518,79 @@ function useEmpleadosData() {
         aria-describedby="edit-dialog-description"
     >
       <DialogTitle id="edit-dialog-title">
-        Crea Nuevo Empleado
+       <BrandingWatermark/> Crea Nuevo Empleado
       </DialogTitle>
       <DialogContent>
-        <TextField     label="Cedula"
-                       fullWidth
-                       value={editFields.dni}
-                       required
-                       onChange={(e) => setEditFields({...editFields,dni:e.target.value})}
-        />
-        <TextField     label="Nombre"   fullWidth
-                       value={editFields.nombre}
-                       required
-                       onChange={(e) => setEditFields({...editFields,nombre:e.target.value})}
-        />
-        <TextField     label="Apellido"   fullWidth
-                       value={editFields.apellido}
-                       required
-                       onChange={(e) => setEditFields({...editFields,apellido:e.target.value})}
-        />
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
         <TextField
-                       type="email"
-                       label="Correo"   fullWidth
-                       value={editFields.username}
-                       required
-                       onChange={(e) => setEditFields({...editFields,username:e.target.value})}
+            label="Cedula"
+            fullWidth
+            value={editFields.dni}
+            required
+            onChange={(e) => setEditFields({ ...editFields, dni: e.target.value })}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <AssignmentInd/>
+                  </InputAdornment>
+              ),
+            }}
         />
-        <InputLabel id="role-label">ROL</InputLabel>
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+                label="Nombre"
+                fullWidth
+                value={editFields.nombre}
+                required
+                onChange={(e) => setEditFields({ ...editFields, nombre: e.target.value })}
+                InputProps={{
+                  startAdornment: (
+                      <InputAdornment position="start">
+                        <Abc />
+                      </InputAdornment>
+                  ),
+                }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+                label="Apellido"
+                fullWidth
+                value={editFields.apellido}
+                required
+                onChange={(e) => setEditFields({ ...editFields, apellido: e.target.value })}
+                InputProps={{
+                  startAdornment: (
+                      <InputAdornment position="start">
+                        <AbcSharp />
+                      </InputAdornment>
+                  ),
+                }}
+            />
+          </Grid>
+        </Grid>
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
+        <TextField
+            type="email"
+            label="Correo"   fullWidth
+            value={editFields.username}
+            required
+            onChange={(e) => setEditFields({...editFields,username:e.target.value})}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <Email/>
+                  </InputAdornment>
+              ),
+            }}
+        />
+
+        <SoftTypography variant="caption" fontWeight="medium">Rol</SoftTypography>
         <Select
             label="Rol"
             value={editFields.role}
@@ -424,6 +600,8 @@ function useEmpleadosData() {
           <MenuItem value="USER">Usuario</MenuItem>
           <MenuItem value="ADMIN">Administrador</MenuItem>
         </Select>
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
         <TextField
             type="password"
             label="Password"
@@ -431,16 +609,32 @@ function useEmpleadosData() {
             required
             value={editFields.password}
             onChange={(e) => setEditFields({ ...editFields, password: e.target.value })}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <Password/>
+                  </InputAdornment>
+              ),
+            }}
         />
+        {/* Separación */}
+        <div style={{ marginBottom: "16px" }}></div>
         <TextField
             type="password"
             label="Confirmar Password"
             fullWidth
             required
-            value={passwordConfirm}
+            value={editFields.password}
             onChange={(e) => setPasswordConfirm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <Password/>
+                  </InputAdornment>
+              ),
+            }}
         />
-        <InputLabel id="departamento-label">Departamento</InputLabel>
+        <SoftTypography variant="caption" fontWeight="medium">Departamento</SoftTypography>
         <Select
             labelId="departamento-label"
             id="departamento"
@@ -449,8 +643,8 @@ function useEmpleadosData() {
             fullWidth
             disabled={departamentos.length === 0}
         >
-         {departamentos.map((departamento) => (
-              <MenuItem key={departamento.idDepartamento} value={departamento.idDepartamento} selected>
+          {departamentos.map((departamento) => (
+              <MenuItem key={departamento.idDepartamento} value={departamento.idDepartamento} selected={editFields.departamento === departamento.idDepartamento}>
                 {departamento.nombreDepartamento}
               </MenuItem>
           ))}

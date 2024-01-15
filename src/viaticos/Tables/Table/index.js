@@ -36,16 +36,38 @@ import SoftTypography from "components/SoftTypography";
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";
+import SoftInput from "../../../components/SoftInput";
+import {navbarRow} from "../../Navbars/DashboardNavbar/styles";
 
 function Table({ columns, rows }) {
-
+  //Busqueda:
+    const [searchValue, setSearchValue] = useState("");
   //paginacion>
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = rows.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = rows.filter((row) => {
+      // Filtrar las filas según el valor de búsqueda
+
+      if (searchValue === "") {
+          return true; // Mostrar todas las filas si no hay valor de búsqueda
+      } else {
+          // Filtrar las filas que contengan el valor de búsqueda en alguna de sus columnas
+          return columns.some(({ name }) => {
+              if (Array.isArray(row[name])) {
+
+                  return row[name][1].toLowerCase().includes(searchValue.toLowerCase());
+              } else if (typeof row[name] === "string") { // Check if the value is a string
+
+                  return row[name].toLowerCase().includes(searchValue.toLowerCase());
+              } else {
+                  return false; // Skip non-string values
+              }
+          });
+      }
+  }).slice(indexOfFirstRow, indexOfLastRow);
 
   const { light } = colors;
   const { size, fontWeightBold } = typography;
@@ -88,10 +110,10 @@ function Table({ columns, rows }) {
   });
 
   //const renderRows = rows.map((row, key) => {
-    const renderRows = currentRows.map((row, key) => {
-    const rowKey = `row-${key}`;
+  const renderRows = currentRows.map((row, key) => {
+  const rowKey = `row-${key}`;
 
-    const tableRow = columns.map(({ name, align }) => {
+  const tableRow = columns.map(({ name, align }) => {
       let template;
 
       if (Array.isArray(row[name])) {
@@ -142,6 +164,16 @@ function Table({ columns, rows }) {
   return useMemo(
       () => (
           <TableContainer>
+
+              <SoftBox pr={0.3} width="25%" >
+              <SoftInput
+                  key={"search"}
+                  placeholder="Buscar..."
+                  icon={{ component: "search", direction: "left" }}
+                  onChange={(e) => setSearchValue(e.target.value)}
+              />
+              </SoftBox>
+
             <MuiTable>
               <SoftBox component="thead">
                 <TableRow>{renderColumns}</TableRow>
@@ -169,7 +201,7 @@ function Table({ columns, rows }) {
           </TableContainer>
 
       ),
-      [columns, rows,currentPage,rowsPerPage]
+      [columns, rows,currentPage,rowsPerPage,currentRows]
   );
 }
 

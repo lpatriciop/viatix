@@ -31,6 +31,7 @@ const empleadosArray=useEmpleadosData();
         // { name: "departamento", headerName: "Departamento", align: "left" },
          { name: "role", headerName: "Rol", align: "left" },
         { name: "action", headerName: "Acciones", align: "center" },
+
         // Agrega otras columnas según sea necesario
     ];
 

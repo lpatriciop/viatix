@@ -109,7 +109,10 @@ function Header({idSalida}) {
         }
     };
     //si hay datos renderizo...
-    if(salida.length!=0)
+   // if(salida.length!=0)
+        if (salida.length===0) {
+            return <div>Cargando datos...</div>;
+        }
 
     return (
         <SoftBox position="relative">

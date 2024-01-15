@@ -1,19 +1,4 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 
@@ -41,8 +26,36 @@ import OrderOverview from "layouts/dashboard/components/OrderOverview";
 // Data
 import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
 import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
+import {API_URL} from "../../config";
+
 
 function Dashboard() {
+  const token = localStorage.getItem("token");
+  const [promedioGastos, setPromedioGastos] = useState();
+  const GetPromedioGastos=async ()=>{
+    try {
+      const response = await fetch(`${API_URL}/viaticos/promedioMontos`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPromedioGastos(data);
+
+      } else {
+        console.error('Error fetching data');
+      }
+    }catch (error){
+      console.error('Error fetching data:', error);
+    }
+  };
+  useEffect(() => {
+    GetPromedioGastos();
+  }, [promedioGastos]);
+
   const { size } = typography;
   const { chart, items } = reportsBarChartData;
 
@@ -88,12 +101,15 @@ function Dashboard() {
             </Grid>
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
-                  title={{ text: "gastos" }}
-                  count="$103,430"
+                  title={{ text: "promedio de gastos" }}
+                  count={"$" + (promedioGastos || 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                   percentage={{ color: "success", text: "+5%" }}
                   icon={{
                     color: "info",
-                    component: "shopping_cart",
+                    component: "paid",
                   }}
               />
             </Grid>

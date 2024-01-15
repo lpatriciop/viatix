@@ -134,12 +134,14 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </SoftBox>
         {isMini ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <SoftBox pr={1}>
-              <SoftInput
-                placeholder="Buscar..."
-                icon={{ component: "search", direction: "left" }}
-              />
-            </SoftBox>
+            {/*<SoftBox pr={1}>*/}
+            {/*  <SoftInput*/}
+            {/*    key={"search"}*/}
+            {/*    placeholder="Buscar..."*/}
+            {/*    icon={{ component: "search", direction: "left" }}*/}
+            {/*    onChange={(e) => setSearchValue(e.target.value)}*/}
+            {/*  />*/}
+            {/*</SoftBox>*/}
             <SoftBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-out">
                 <IconButton sx={navbarIconButton} size="small">

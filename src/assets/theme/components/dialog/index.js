@@ -16,7 +16,8 @@ Coded by www.creative-tim.com
 // Soft UI Dashboard React base styles
 import borders from "assets/theme/base/borders";
 import boxShadows from "assets/theme/base/boxShadows";
-
+// Images
+import curved9 from "assets/images/bruce-mars.jpg";
 const { borderRadius } = borders;
 const { xxl } = boxShadows;
 
@@ -25,6 +26,8 @@ const dialog = {
     paper: {
       borderRadius: borderRadius.lg,
       boxShadow: xxl,
+      backgroundImage: {curved9},
+      backgroundSize: "cover",
     },
 
     paperFullScreen: {

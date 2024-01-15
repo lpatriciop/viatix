@@ -15,6 +15,7 @@ import routes from "routes";
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
 import brand from "assets/images/logo-ct.png";
 import Detalle from "./layouts/detalle";
+import Gastos from "./layouts/gastos";
 
 
 export default function App() {
@@ -130,6 +131,7 @@ export default function App() {
               {/*<Route path="*" element={<Navigate to="/dashboard" />} />*/}
                 <Route path="*" element={<Navigate to="/authentication/sign-in" />} key={"sign-in"} />
                 <Route path="/detalle/:idSalida" element={<Detalle />} />
+                <Route path="/gastos/:idEmpleado" element={<Gastos />} />
             </Routes>
           </ThemeProvider>
 
