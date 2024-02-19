@@ -19,6 +19,7 @@ const empleadosArray=useEmpleadosData();
     const dialogoEdit = empleadosArray.props.children[2];
      const dialogoNew = empleadosArray.props.children[3];
      const botonNew = empleadosArray.props.children[4];
+     const alerta=empleadosArray.props.children[5];
     const columns = [
         { name: "idEmpleado", headerName: "ID", align: "left" },
          { name: "dni", headerName: "DNI", align: "left" },
@@ -39,11 +40,13 @@ const empleadosArray=useEmpleadosData();
     return (
 
         <DashboardLayout>
+            {alerta}
             {dialogoDelete}
             {dialogoEdit}
             {dialogoNew}
             <DashboardNavbar />
             <SoftBox py={3}>
+
                 <SoftBox mb={3}>
                     <Card>
                         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState,useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -21,7 +21,8 @@ import borders from "assets/theme/base/borders";
 import {API_URL} from "../../../config";
 import SoftButton from "../../../components/SoftButton";
 const token = localStorage.getItem("token");
-
+import { Select, MenuItem } from "@mui/material";
+import swal from "sweetalert";
 function Table2({ columns, rows }) {
     //paginacion>
     const [currentPage, setCurrentPage] = useState(1);
@@ -133,14 +134,61 @@ function Table2({ columns, rows }) {
         }
     }), [columns]);
     const renderDetailRow = (rowId) => {
+
         const details = rowDetails[rowId];
         // console.log(details);
         if (!details) {
             return <TableRow key={`nodata-${rowId}`} ><TableCell>Cargando...</TableCell></TableRow>;
         }
-        const totalMonto = details.reduce((total, detail) => total + detail.monto, 0);
+        // const totalMonto = details.reduce((total, detail) => total + detail.monto, 0);
+        const totalMonto = details.reduce((total, detail) => {
+            if (detail.estado === "Aprobado") {
+                return total + detail.monto;
+            }
+            return total;
+        }, 0);
+        const handleToggleChange = (event, detail) => {
+          const newEstado = event.target.value;
+          detail.estado=newEstado;
+          handleConfirmEdit(detail.idViatico,newEstado);
+
+
+        };
+        const handleConfirmEdit = async (viatico,estado) => {
+            let alerta;
+            if (estado === "Aprobado") {
+                alerta = "success";
+            } else if (estado === "Rechazado") {
+                alerta = "error";
+            } else {
+                alerta = "warning";
+            }
+            try {
+                const response = await fetch(`${API_URL}/viaticos/estado/${viatico}/${estado}`, {
+                    method: 'PUT',
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    // body: JSON.stringify(viatico),
+                });
+
+                if (response.ok) {
+                    swal(`${estado}`, "El estado del Viatico ha sido actualizado correctamente", `${alerta}`);
+
+                } else {
+                    swal("Advertencia", "No se ha podido actualizar el estado.", "warning");
+                }
+            } catch (error) {
+                swal("Error", "Error al ejecutar la solicitud de actualizar." + error.toLocaleString(), "error");
+            } finally {
+
+            }
+        };
+
+
         // Renderiza los detalles de la fila aquí
-        return(
+         return(
         <>
             <TableRow  key={`header-${rowId}`}   >
                 {/* Agrega aquí las celdas del encabezado */}
@@ -151,6 +199,7 @@ function Table2({ columns, rows }) {
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>UBICACIÓN</SoftTypography>
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>EVIDENCIA</SoftTypography>
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>MONTO</SoftTypography></TableCell>
+            <TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>ESTADO</SoftTypography></TableCell>
             </TableRow>
 
             {details.map((detail, index) => (
@@ -194,6 +243,17 @@ function Table2({ columns, rows }) {
                         </SoftTypography>
                     </TableCell>
                     <TableCell><SoftTypography variant="body2" color="monto" fontWeight="bold" fontSize={size.xxs}>{detail.monto.toLocaleString("es-ES", { style: "currency", currency: "USD" })}</SoftTypography></TableCell>
+                    {/*<TableCell><SoftTypography variant="body2" color="monto" fontWeight="bold" fontSize={size.xxs}>{detail.estado}</SoftTypography></TableCell>*/}
+                    <TableCell>
+                        <Select
+                            value={detail.estado}
+                            onChange={(event) => handleToggleChange(event, detail)}
+                        >
+                            <MenuItem value="Pendiente">Pendiente</MenuItem>
+                            <MenuItem value="Aprobado">Aprobado</MenuItem>
+                            <MenuItem value="Rechazado">Rechazado</MenuItem>
+                        </Select>
+                    </TableCell>
                 </TableRow>
             ))}
             <TableRow key={`footer-${rowId}`} >

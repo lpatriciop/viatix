@@ -85,31 +85,7 @@ function Header({idEmpleado}) {
         //SumarMonto();
 
     },[idEmpleado]);
-    // useEffect(() => {
-    //     //   console.log(salida.gastoEstimado,gastoReal);
-    //     setDiferencia(salida.gastoEstimado-gastoReal);
-    // }, [gastoReal]);
-    //Terminar Salida
-    // const handleTerminarSalida = async () => {
-    //     try {
-    //             const responset = await fetch(`${API_URL}/salidas/terminar/${idSalida}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                      'Authorization': `Bearer ${token}`,
-    //             },
-    //         });
-    //           if (responset.ok) {
-    //             // Recargar la información del estado aquí
-    //             SalidaDetalle();
-    //         } else {
-    //             console.error("Error al terminar la salida");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error al terminar la salida:", error);
-    //     }
-    // };
-    //si hay datos renderizo...
-   // if(salida.length!=0)
+
         if (empleado.length===0) {
             return <div>Cargando datos...</div>;
         }

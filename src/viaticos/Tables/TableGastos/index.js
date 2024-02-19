@@ -20,11 +20,15 @@ import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";
 import {API_URL} from "../../../config";
 import SoftButton from "../../../components/SoftButton";
+import SoftInput from "../../../components/SoftInput";
+import ExcelExportButton from "../Excel";
 const token = localStorage.getItem("token");
 
 function TableGastos({ columns, rows,idEmpleado}) {
  //   console.log("IDEMEPLEADO>",idEmpleado);
     const idE=idEmpleado;
+//Busqueda:
+    const [searchValue, setSearchValue] = useState("");
 
     //paginacion>
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +36,26 @@ function TableGastos({ columns, rows,idEmpleado}) {
 
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = rows.slice(indexOfFirstRow, indexOfLastRow);
+    const currentRows = rows.filter((row) => {
+        // Filtrar las filas según el valor de búsqueda
+
+        if (searchValue === "") {
+            return true; // Mostrar todas las filas si no hay valor de búsqueda
+        } else {
+            // Filtrar las filas que contengan el valor de búsqueda en alguna de sus columnas
+            return columns.some(({ name }) => {
+                if (Array.isArray(row[name])) {
+
+                    return row[name][1].toLowerCase().includes(searchValue.toLowerCase());
+                } else if (typeof row[name] === "string") { // Check if the value is a string
+
+                    return row[name].toLowerCase().includes(searchValue.toLowerCase());
+                } else {
+                    return false; // Skip non-string values
+                }
+            });
+        }
+    }).slice(indexOfFirstRow, indexOfLastRow);
 //GEOCODING INVERSE:
     const getReverseGeocoding = async (ubicacion) => {
 
@@ -155,6 +178,7 @@ function TableGastos({ columns, rows,idEmpleado}) {
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>UBICACIÓN</SoftTypography>
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>EVIDENCIA</SoftTypography>
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>MONTO</SoftTypography></TableCell>
+
             </TableRow>
 
             {details.map((detail, index) => (
@@ -198,6 +222,7 @@ function TableGastos({ columns, rows,idEmpleado}) {
                         </SoftTypography>
                     </TableCell>
                     <TableCell><SoftTypography variant="body2" color="monto" fontWeight="bold" fontSize={size.xxs}>{detail.monto.toLocaleString("es-ES", { style: "currency", currency: "USD" })}</SoftTypography></TableCell>
+
                 </TableRow>
             ))}
             <TableRow key={`footer-${rowId}`} >
@@ -285,6 +310,19 @@ function TableGastos({ columns, rows,idEmpleado}) {
 
     return (
         <TableContainer>
+            <SoftBox display="flex">
+                <SoftBox pr={0.3} width="50%">
+                    <SoftInput
+                        key={"search"}
+                        placeholder="Buscar..."
+                        icon={{ component: "search", direction: "left" }}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                </SoftBox>
+                <SoftBox pr={0.5} width="50%">
+                    <ExcelExportButton data={rows}/>
+                </SoftBox>
+            </SoftBox>
             <MuiTable>
                 <SoftBox component="thead">
                     <TableRow>{renderColumns}</TableRow>

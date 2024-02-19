@@ -26,6 +26,7 @@ import {
 import SoftButton from "../../../components/SoftButton";
 import {InputLabel, Select, TextField, MenuItem, IconButton,InputAdornment} from "@mui/material";
 import Grid from "@mui/material/Grid";
+import SoftAlert from "../../../components/SoftAlert";
 
 
 
@@ -34,11 +35,13 @@ function useEmpleadosData() {
   const [data,setData]=useState([]);
   const token = localStorage.getItem("token");
   const [error, setError] = useState('');
+
 //DEL
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(false);
   //ELIMINAR
-  const handleDelete = async (id) => {
+  const handleDelete = (e,id) => {
+    e.preventDefault();
     setDeleteItemId(id);
     setDeleteDialogOpen(true);
   };
@@ -56,13 +59,19 @@ function useEmpleadosData() {
       });
 
       if (response.ok) {
-        console.log(`Empleado con ID ${deleteItemId} eliminada exitosamente`);
+        setAlertMessage(`Empleado con ID ${deleteItemId} eliminado exitosamente`);
+        setShowAlert(true);setColorAlert("success");
+     //   console.log(`Empleado con ID ${deleteItemId} eliminada exitosamente`);
         fetchData();
       } else {
-        console.error('Error al eliminar la categoría');
+        setAlertMessage(`No se puede eliminar un empleado, si tiene registrados viáticos o si es Admministrador`);
+        setShowAlert(true);setColorAlert("error");
+       // console.error('Error al eliminar empleado');
       }
     } catch (error) {
-      console.error('Error al procesar la solicitud de eliminación:', error);
+      setAlertMessage(`Error al procesar la solicitud.`);
+      setShowAlert(true);setColorAlert("error");
+      //console.error('Error al procesar la solicitud de eliminación:', error);
     } finally {
       setDeleteItemId(null);
       setDeleteDialogOpen(false);
@@ -92,7 +101,7 @@ function useEmpleadosData() {
       nombre: item.nombre,
       username: item.username,
       apellido: item.apellido,
-      departamento: item.departamento.idDepartamento,
+      departamento: item.departamento,
       role:item.role,
       password:item.password,
       dni:item.dni,
@@ -108,6 +117,7 @@ function useEmpleadosData() {
 
     try {
             const updateEditFields=editFields;
+            console.log(updateEditFields);
       // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
       const response = await fetch(`${API_URL}/empleados/${id.idEmpleado}`, {
         method: 'PUT',
@@ -128,11 +138,15 @@ function useEmpleadosData() {
       });
 
       if (response.ok) {
-        console.log(`Empleado con ID ${id.idEmpleado} editada exitosamente`);
+
+        setAlertMessage(`Empleado con ID ${id.idEmpleado} editada exitosamente`);
+        setShowAlert(true);setColorAlert("success");
+       // console.log(`Empleado con ID ${id.idEmpleado} editada exitosamente`);
         // Actualiza el estado o vuelve a cargar los datos después de la edición
         fetchData();
       } else {
-        console.error('Error al editar la categoría');
+        setAlertMessage(`Empleado no se pudo editar`);
+        setShowAlert(true);setColorAlert("error");
       }
     } catch (error) {
       console.error('Error al procesar la solicitud de edición:', error);
@@ -203,11 +217,15 @@ function useEmpleadosData() {
       });
 
       if (response.ok) {
-        console.log(`Empleado  exitosamente`);
+        setAlertMessage(`Empleado creado exitosamente`);
+        setShowAlert(true);setColorAlert("success");
+    //    console.log(`Empleado  exitosamente`);
         // Actualiza el estado o vuelve a cargar los datos después de la edición
         fetchData();
       } else {
-        console.error('Error al editar el empleado');
+        setAlertMessage(`Error al crear el empleado`);
+        setShowAlert(true);setColorAlert("error");
+      //  console.error('Error al editar el empleado');
       }
     } catch (error) {
       console.error('Error al procesar la solicitud de edición:', error);
@@ -238,6 +256,7 @@ function useEmpleadosData() {
     }
   };
   const fetchData= async ()=> {
+
     try {
       const response = await fetch(endpoint, {
         method: 'GET',
@@ -245,6 +264,7 @@ function useEmpleadosData() {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (response.ok) {
         const fetchedData = await response.json();
         const dataWithActions = fetchedData.map(item => ({
@@ -291,10 +311,13 @@ function useEmpleadosData() {
         }));
         setData(dataWithActions);
         //console.log(dataWithActions);
-      } else {
+
+      }else {
+
         console.error('Error fetching data');
       }
     }catch (error) {
+
       console.error('Error fetching data:', error);
     }
   };
@@ -306,6 +329,17 @@ function useEmpleadosData() {
    //  console.log(newDialogOpen,departamentos);
   }, [newDialogOpen]);
 
+  //ALERTAS:
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [colorAlert, setColorAlert] = useState();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAlert(false);
+    }, 3000); // 3000 milisegundos = 3 segundos
+
+    return () => clearTimeout(timer);
+  }, [showAlert]);
   //pass
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const validatePassword = () => {
@@ -675,6 +709,11 @@ function useEmpleadosData() {
     <SoftButton variant="gradient" color="dark"  onClick={handleNew}>
       <Add /> &nbsp;Nuevo Empleado
     </SoftButton>
+
+    {showAlert && (
+        <SoftAlert color={colorAlert} dismissible>
+          {alertMessage}
+        </SoftAlert>)}
   </>);
 }
 

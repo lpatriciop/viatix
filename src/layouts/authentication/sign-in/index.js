@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 // react-router-dom components
 import {Link,useNavigate} from "react-router-dom";
@@ -19,6 +19,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 import {API_URL} from "../../../config";
 
+
 function SignIn() {
   const navigate=useNavigate();
   const [rememberMe, setRememberMe] = useState(true);
@@ -35,7 +36,13 @@ function SignIn() {
     setPassword(e.target.value);
 
   };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError("");
+    }, 3000); // 3000 milisegundos = 3 segundos
 
+    return () => clearTimeout(timer);
+  }, [error]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = '/auth/v1/signin';
@@ -64,7 +71,8 @@ function SignIn() {
       }
     } catch (error) {
       // Si hay un error en la solicitud, maneja el error aquí
-      setError('Error al enviar la solicitud:'+ error);
+     // setError('Error al enviar la solicitud:'+ error);
+      setError("Usuario o Clave incorrecta.")
     }
   };
   return (
@@ -73,9 +81,7 @@ function SignIn() {
       description="Ingresa tu correo para Ingresar..."
       image={curved9}
     >
-      <SoftTypography variant="body2" color="error">
-        {error}
-      </SoftTypography>
+
       <SoftBox component="form" role="form" onSubmit={handleSubmit}>
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
@@ -106,6 +112,9 @@ function SignIn() {
         {/*    &nbsp;&nbsp;Remember me*/}
         {/*  </SoftTypography>*/}
         {/*</SoftBox>*/}
+        <SoftTypography variant="body2" color="error">
+          {error}
+        </SoftTypography>
         <SoftBox mt={4} mb={1}>
           <SoftButton variant="gradient" color="info" fullWidth onClick={handleSubmit}>
             Ingresar

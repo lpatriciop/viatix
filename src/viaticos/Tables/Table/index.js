@@ -38,10 +38,13 @@ import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";
 import SoftInput from "../../../components/SoftInput";
 import {navbarRow} from "../../Navbars/DashboardNavbar/styles";
+import SoftButton from "../../../components/SoftButton";
+import IconButton from "@mui/material/IconButton";
+import ExcelExportButton from "../Excel";
 
 function Table({ columns, rows }) {
   //Busqueda:
-    const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   //paginacion>
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -164,16 +167,19 @@ function Table({ columns, rows }) {
   return useMemo(
       () => (
           <TableContainer>
-
-              <SoftBox pr={0.3} width="25%" >
-              <SoftInput
-                  key={"search"}
-                  placeholder="Buscar..."
-                  icon={{ component: "search", direction: "left" }}
-                  onChange={(e) => setSearchValue(e.target.value)}
-              />
+              <SoftBox display="flex" >
+                  <SoftBox pr={0.3} width="50%">
+                      <SoftInput
+                          key={"search"}
+                          placeholder="Buscar..."
+                          icon={{ component: "search", direction: "left" }}
+                          onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                  </SoftBox>
+                  <SoftBox pr={0.5} width="50%" >
+                      <ExcelExportButton data={rows}/>
+                  </SoftBox>
               </SoftBox>
-
             <MuiTable>
               <SoftBox component="thead">
                 <TableRow>{renderColumns}</TableRow>
@@ -189,9 +195,9 @@ function Table({ columns, rows }) {
                 page={currentPage - 1}
                 // onPageChange={(event, newPage) => setCurrentPage(newPage + 1)}
                 onPageChange={(event, newPage) => {
-                  console.log("Nueva página: ", newPage + 1);
+                 // console.log("Nueva página: ", newPage + 1);
                   setCurrentPage(newPage + 1);
-                  console.log(currentPage)
+                 // console.log(currentPage)
                 }}
                 onRowsPerPageChange={(event) => {
                   setRowsPerPage(parseInt(event.target.value, 10));

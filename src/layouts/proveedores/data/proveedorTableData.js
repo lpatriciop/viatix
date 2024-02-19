@@ -15,7 +15,7 @@ import {Add, Icecream, PlusOne, Warning} from "@mui/icons-material";
 import SoftButton from "../../../components/SoftButton";
 import {InputLabel, Select, TextField,MenuItem} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import Alert from "@mui/material/Alert";
+import SoftAlert from "../../../components/SoftAlert";
 import Separator from "../../authentication/components/Separator";
 import {Line} from "react-chartjs-2";
 import Divider from "@mui/material/Divider";
@@ -50,18 +50,17 @@ function useProveedorData() {
       });
 
       if (response.ok) {
-        setMensajeAlerta(`Proveedor Eliminado Satisfactoriamente`)
-        setTipoAlerta("success");
-        setAsignarAlerta(true);
-        //console.log(`Item con ID ${deleteItemId} eliminada exitosamente`);
+        setAlertMessage(`Proveedor Eliminado Satisfactoriamente`);
+        setShowAlert(true);setColorAlert("success");
         fetchData();
       } else {
-        setMensajeAlerta(`Error al eliminar Proveedor, es posible que esté siendo utilizada por un viático.`)
-        setTipoAlerta("error");
-        setAsignarAlerta(true);
+        setAlertMessage(`Error al eliminar Proveedor, es posible que esté siendo utilizada por un viático.`);
+        setShowAlert(true);setColorAlert("error");
       }
     } catch (error) {
-      console.error('Error al procesar la solicitud de eliminación:', error);
+      setAlertMessage(`Error al procesar la solicitud.`);
+      setShowAlert(true);setColorAlert("error");
+     // console.error('Error al procesar la solicitud de eliminación:', error);
     } finally {
       setDeleteItemId(null);
       setDeleteDialogOpen(false);
@@ -116,19 +115,19 @@ function useProveedorData() {
       });
 
       if (response.ok) {
-        setMensajeAlerta(`Proveedor editado Satisfactoriamente`)
-        setTipoAlerta("success");
-        setAsignarAlerta(true);
+        setAlertMessage(`Proveedor Editado Satisfactoriamente`);
+        setShowAlert(true);setColorAlert("success");
    //     console.log(`Item con ID ${id.idProveedor} editado exitosamente`);
         // Actualiza el estado o vuelve a cargar los datos después de la edición
         fetchData();
       } else {
-        setMensajeAlerta(`Error al editar Proveedor`)
-        setTipoAlerta("error");
-        setAsignarAlerta(true);
+        setAlertMessage(`Error al editar Proveedor`);
+        setShowAlert(true);setColorAlert("error");
       }
     } catch (error) {
-      console.error('Error al procesar la solicitud de edición:', error);
+      setAlertMessage(`Error al procesar la solicitud.`);
+      setShowAlert(true);setColorAlert("error");
+      //console.error('Error al procesar la solicitud de edición:', error);
     } finally {
       setEditItemId(null);
       setEditDialogOpen(false);
@@ -164,9 +163,9 @@ function useProveedorData() {
 
       ) {
 
-        setMensajeAlerta("Por favor, complete todos los campos obligatorios.");
-        setTipoAlerta("error");
-        setAsignarAlerta(true);
+        setAlertMessage(`Por favor, complete todos los campos obligatorios.`);
+        setShowAlert(true);setColorAlert("success");
+
         return;
        }
 
@@ -188,19 +187,18 @@ function useProveedorData() {
       });
 
       if (response.ok) {
-        setMensajeAlerta(`Proveedor creado Satisfactoriamente.`)
-        setTipoAlerta("success");
-        setAsignarAlerta(true);
-
+        setAlertMessage(`Proveedor creado Satisfactoriamente.`);
+        setShowAlert(true);setColorAlert("success");
         // Actualiza el estado o vuelve a cargar los datos después de la edición
         fetchData();
       } else {
-        setMensajeAlerta(`Error al asignar al crear nuevo Proveedor}`)
-        setTipoAlerta("error");
-        setAsignarAlerta(true);
+        setAlertMessage(`Error al crear un nuevo proveedor`);
+        setShowAlert(true);setColorAlert("error");
       }
     } catch (error) {
-      console.error('Error al procesar la solicitud de edición:', error);
+      setAlertMessage(`Error al procesar la solicitud.`);
+      setShowAlert(true);setColorAlert("error");
+     // console.error('Error al procesar la solicitud de edición:', error);
     } finally {
       setNewItemId(null);
 
@@ -295,16 +293,17 @@ function useProveedorData() {
         fetchDataComplemento();
 
   }, [newDialogOpen,editDialogOpen]);
-  const [asignarAlerta, setAsignarAlerta] = useState(false);
-  const [mensajeAlerta, setMensajeAlerta] = useState('OK');
-  const [tipoAlerta, setTipoAlerta] = useState('success');
+  //ALERTAS:
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [colorAlert, setColorAlert] = useState();
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAsignarAlerta(false);
+      setShowAlert(false);
     }, 3000); // 3000 milisegundos = 3 segundos
 
     return () => clearTimeout(timer);
-  }, [asignarAlerta]);
+  }, [showAlert]);
 
 
   return (<>
@@ -462,9 +461,10 @@ function useProveedorData() {
     <SoftButton variant="gradient" color="dark"  onClick={handleNew}>
       <Add /> &nbsp;Nuevo
     </SoftButton>
-    {asignarAlerta && (<Alert severity={tipoAlerta} >
-      {mensajeAlerta}
-    </Alert>)}
+    {showAlert && (
+        <SoftAlert color={colorAlert} dismissible>
+          {alertMessage}
+        </SoftAlert>)}
   </>);
 }
 

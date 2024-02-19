@@ -36,7 +36,7 @@ function useDetalleData({idEmpleado}) {
 
   const [data,setData]=useState([]);
   const token = localStorage.getItem("token");
-  const [error, setError] = useState('');
+
 //DEL
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(false);
@@ -78,11 +78,6 @@ function useDetalleData({idEmpleado}) {
     }
   };
 
-  //editar
-  //EDITAR
-
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editItemId, setEditItemId] = useState(null);
   const [editFields, setEditFields] = useState({
     nombre: "",
     username:"",
@@ -94,70 +89,7 @@ function useDetalleData({idEmpleado}) {
     // Otros campos de edición si los hay
   });
 
-  const handleEdit = (item) => {
 
-    setEditItemId(item);
-    setEditFields({
-      nombre: item.nombre,
-      username: item.username,
-      apellido: item.apellido,
-      departamento: item.departamento,
-      role:item.role,
-      password:item.password,
-      dni:item.dni,
-    })
-
-    setEditDialogOpen(true);
-  };
-  const handleCancelEdit = () => {
-    setEditItemId(null);
-    setEditDialogOpen(false);
-  };
-  const handleConfirmEdit = async (id) => {
-
-    try {
-            const updateEditFields=editFields;
-      // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
-      const response = await fetch(`${API_URL}/empleados/${id.idEmpleado}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          nombre: updateEditFields.nombre,
-          apellido:updateEditFields.apellido,
-          username: updateEditFields.username,
-          role:updateEditFields.role,
-          password:updateEditFields.password,
-          dni:updateEditFields.dni,
-          departamento:updateEditFields.departamento
-          // Otros campos actualizados si los hay
-        }),
-      });
-
-      if (response.ok) {
-        console.log(`Empleado con ID ${id.idEmpleado} editada exitosamente`);
-        // Actualiza el estado o vuelve a cargar los datos después de la edición
-        fetchData();
-      } else {
-        console.error('Error al editar la categoría');
-      }
-    } catch (error) {
-      console.error('Error al procesar la solicitud de edición:', error);
-    } finally {
-      setEditItemId(null);
-      setEditDialogOpen(false);
-    }
-  };
-
-  //NEW
-
-  //--
-  const [newDialogOpen, setNewDialogOpen] = useState(false);
-  const [newItemId, setNewItemId] = useState(null);
-  const [departamentos, setDepartamentos] = useState([]);
-  const endpointDepar = API_URL + "/departamentos";
 
   const handleNew = (item) => {
     setNewItemId(item);
@@ -172,84 +104,9 @@ function useDetalleData({idEmpleado}) {
     })
     setNewDialogOpen(true);
   };
-  const handleCancelNew = () => {
-    setNewItemId(null);
-    setNewDialogOpen(false);
-  };
-  const handleConfirmNew = async () => {
-
-    try {
-
-      if (
-          editFields.nombre.trim() === '' ||
-          editFields.apellido.trim() === '' ||
-          editFields.username.trim() === '' ||
-          editFields.role.trim() === '' ||
-          editFields.password.trim() === '' ||
-          editFields.dni.trim() === ''
-      ) {
-        setError('Por favor, complete todos los campos obligatorios.');
-        return;
-       }
-
-      // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-      //    Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-
-          nombre: editFields.nombre,
-          apellido:editFields.apellido,
-          email: editFields.username,
-          role:editFields.role,
-          password:editFields.password,
-          dni:editFields.dni,
-          idDepartamento:editFields.departamento
-        }),
-      });
-
-      if (response.ok) {
-        console.log(`Empleado  exitosamente`);
-        // Actualiza el estado o vuelve a cargar los datos después de la edición
-        fetchData();
-      } else {
-        console.error('Error al editar el empleado');
-      }
-    } catch (error) {
-      console.error('Error al procesar la solicitud de edición:', error);
-    } finally {
-      setNewItemId(null);
-
-    }
-    setNewDialogOpen(false);
-  };
-  const fetchDataDepartamento=async()=>{
-    try {
-      const response=await fetch(endpointDepar,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-      if(response.ok){
-        const dataDepar=await response.json();
-        dataDepar.length>0?setDepartamentos(dataDepar):setDepartamentos([{"idDepartamento":"-1","nombreDepartamento":"No departamentos disponibles"}])
-
-      }else {
-        console.error('Error fetching data');
-      }
-    }catch (error){
-      console.error('Error fetching data:', error);
-    }
-  };
-
   const fetchData= async ()=> {
     const endpoint = `${API_URL}/empleadoSalidas/empleado/todas/${idEmpleado}`;
-    console.log(endpoint);
+
     try {
       const response = await fetch(endpoint, {
         method: 'GET',
