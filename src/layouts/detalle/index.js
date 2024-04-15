@@ -20,7 +20,7 @@ function Listado(idSalida){
         { name: "idEmpleadoSalida", headerName: "ID", align: "left" },
         { name: "dni", headerName: "IDENTIFICACIÓN", align: "left" },
         { name: "nombre", headerName: "Nombre", align: "left" },
-         { name: "apellido", headerName: "Apellido", align: "left" },
+        { name: "apellido", headerName: "Apellido", align: "left" },
         { name: "departamento", headerName: "Departamento", align: "left" },
         { name: "action", headerName: "Acciones", align: "center" },
         // Agrega otras columnas según sea necesario
