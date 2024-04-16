@@ -24,7 +24,9 @@ import Empleados from "./layouts/empleados";
 import Proveedores from "./layouts/proveedores";
 import Salidas from "./layouts/salidas";
 import Detalle from "./layouts/detalle";
-import {Category, ContactPage, Groups} from "@mui/icons-material";
+import {Category, ContactPage, Groups, Summarize} from "@mui/icons-material";
+import ReporteGastos from "./layouts/reportegastos";
+import Separator from "./layouts/authentication/components/Separator";
 
 
 const routes = [
@@ -82,28 +84,30 @@ const routes = [
 
 
 
-  { type: "title", title: "Opciones de Sesión", key: "account-pages" },
-  // {
-  //   type: "collapse",
-  //   name: "Perfil",
-  //   key: "profile",
-  //   route: "/profile",
-  //   icon: <CustomerSupport size="12px" />,
-  //   component: <Billing  />,
-  //   noCollapse: true,
-  //   isPrivate: true,
-  // },
+  { type: "title", title: "Reportes", key: "account-pages" },
   {
     type: "collapse",
-    name: "Iniciar Sesión",
+    name: "Reporte Gastos",
+    key: "reportegastos",
+    route: "/reportegastos",
+    icon: <Summarize size="12px" />,
+    component: <ReporteGastos  />,
+    noCollapse: true,
+    isPrivate: true,
+  },
+  { type: "title", title: "Sesión", key: "sesions" },
+   {
+    // type: "collapse",
+    // name: "Iniciar Sesión",
     key: "sign-in",
     route: "/authentication/sign-in",
-    icon: <SpaceShip size="12px" />,
+    // icon: <SpaceShip size="12px" />,
     component: <SignIn />,
-    noCollapse: true,
-    isPrivate: false,
+    // noCollapse: true,
+    // isPrivate: false,
+
   },
-  // {
+  //{
   //   type: "collapse",
   //   name: "Tablas",
   //   key: "tables",
