@@ -23,7 +23,9 @@ import SoftButton from "../../../components/SoftButton";
 const token = localStorage.getItem("token");
 import { Select, MenuItem } from "@mui/material";
 import swal from "sweetalert";
+import LoadingOverlay from 'react-loading-overlay-ts';
 function Table2({ columns, rows }) {
+    const [dataLoaded, setDataLoaded] = useState(false);
     //paginacion>
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -60,7 +62,11 @@ function Table2({ columns, rows }) {
     const { light } = colors;
     const { size, fontWeightBold } = typography;
     const { borderWidth } = borders;
+    const [filaEstado, setFilaEstado] = useState(null);
+    const [empleadoDetalle, setEmpleadoDetalle] = useState(null);
+    const [filaDetalle, setFilaDetalle] = useState(null);
     const fetchRowDetails = async (rowId,idv) => {
+
         const endpoint = `${API_URL}/viaticos/empleadoSalida/${idv}`;
 
         const response = await fetch(endpoint, {
@@ -69,6 +75,7 @@ function Table2({ columns, rows }) {
                 Authorization: `Bearer ${token}`,
             },
         });
+
         if (response.ok){
             const details = await response.json();
             // Convertir la coordenada espacial en dirección utilizando getReverseGeocoding
@@ -79,22 +86,24 @@ function Table2({ columns, rows }) {
             }));
 
             setRowDetails(prevDetails => ({ ...prevDetails, [rowId]: updatedDetails }));
+
         }
 
     };
     const handleRowClick = (row,rowId) => {
 
-
-
         const isCurrentlyExpanded = expandedRows.includes(rowId);
         if (!isCurrentlyExpanded) {
-            fetchRowDetails(rowId,row.idEmpleadoSalida);
+          fetchRowDetails(rowId,row.idEmpleadoSalida);
+
+
         }
         setExpandedRows(prevRows =>
             isCurrentlyExpanded
                 ? prevRows.filter(id => id !== rowId)
                 : [...prevRows, rowId]
         );
+
     };
     const renderColumns = useMemo(() => columns.map(({ name, headerName, align, width }, key) => {
         {
@@ -150,11 +159,14 @@ function Table2({ columns, rows }) {
         const handleToggleChange = (event, detail) => {
           const newEstado = event.target.value;
           detail.estado=newEstado;
+            setFilaDetalle(rowId)
+          //  setEmpleadoDetalle(row.idEmpleadoSalida)
           handleConfirmEdit(detail.idViatico,newEstado);
 
 
         };
         const handleConfirmEdit = async (viatico,estado) => {
+
             let alerta;
             if (estado === "Aprobado") {
                 alerta = "success";
@@ -174,6 +186,8 @@ function Table2({ columns, rows }) {
                 });
 
                 if (response.ok) {
+                    setFilaEstado(estado);
+
                     swal(`${estado}`, "El estado del Viatico ha sido actualizado correctamente", `${alerta}`);
 
                 } else {
@@ -188,8 +202,11 @@ function Table2({ columns, rows }) {
 
 
         // Renderiza los detalles de la fila aquí
+
          return(
         <>
+
+
             <TableRow  key={`header-${rowId}`}   >
                 {/* Agrega aquí las celdas del encabezado */}
                 <TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>FECHA</SoftTypography></TableCell>
@@ -201,7 +218,6 @@ function Table2({ columns, rows }) {
                 </TableCell><TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>MONTO</SoftTypography></TableCell>
             <TableCell><SoftTypography variant="body2" fontWeight="bold" fontSize={size.xxs}>ESTADO</SoftTypography></TableCell>
             </TableRow>
-
             {details.map((detail, index) => (
                 <TableRow key={`detail-${rowId}-${index}`}>
 
@@ -269,6 +285,7 @@ function Table2({ columns, rows }) {
                     </SoftTypography>
                 </TableCell>
             </TableRow>
+
         </>
         );
     };
@@ -338,6 +355,11 @@ function Table2({ columns, rows }) {
             </>
         );
     });
+    useEffect(() => {
+        return () => {
+          if(empleadoDetalle && filaDetalle)  fetchRowDetails(filaDetalle,empleadoDetalle);
+        };
+    }, [filaEstado]);
 
     return (
         <TableContainer>
@@ -355,9 +377,9 @@ function Table2({ columns, rows }) {
                 page={currentPage - 1}
                 // onPageChange={(event, newPage) => setCurrentPage(newPage + 1)}
                 onPageChange={(event, newPage) => {
-                    console.log("Nueva página: ", newPage + 1);
+                 //   console.log("Nueva página: ", newPage + 1);
                     setCurrentPage(newPage + 1);
-                    console.log(currentPage)
+                 //   console.log(currentPage)
                 }}
                 onRowsPerPageChange={(event) => {
                     setRowsPerPage(parseInt(event.target.value, 10));

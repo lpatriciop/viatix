@@ -22,6 +22,8 @@
     "@mui/styled-engine": "5.12.3",
     "@mui/styles": "^5.14.18",
     "@mui/x-date-pickers": "^6.18.1",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf/renderer": "^3.3.8",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
@@ -35,7 +37,10 @@
     "react-countup": "6.4.2",
     "react-dom": ">=16.8.0",
     "react-flatpickr": "3.10.13",
+    "react-loader-spinner": "^6.1.6",
+    "react-loading-overlay-ts": "^2.0.2",
     "react-number-format": "^5.3.1",
+    "react-pdf": "^7.7.1",
     "react-router-dom": "6.11.1",
     "react-scripts": "^5.0.1",
     "stylis": "4.2.0",
@@ -70,15 +75,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint": "^8.40.0",
-    "eslint-config-prettier": "8.8.0",
-    "eslint-plugin-import": "2.27.5",
-    "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.32.2",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "prettier": "2.8.8"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

@@ -74,17 +74,32 @@ function CrearSalida({setReloadListado}){
     const handleConfirmNew = async () => {
 
         try {
-
+             // console.log(editFields);
             if (
                 editFields.descripcionSalidad.trim() === '' ||
-                editFields.gastoEstimado.trim() === ''
-
-
+                editFields.fechaSalida.toDateString()==="Invalid Date" ||
+                editFields.fechaRegreso.toDateString()==="Invalid Date" ||
+                editFields.ciudadOrigen.nombreCiudad===undefined ||
+                editFields.ciudadDestino.nombreCiudad===undefined
             ) {
-                setError('Por favor, complete todos los campos obligatorios.');
+                swal("Adevertencia",`Por favor, complete todos los campos son obligatorios.`,"warning");
                 return;
             }
 
+            if(editFields.ciudadOrigen.nombreCiudad===editFields.ciudadDestino.nombreCiudad){
+                swal("Adevertencia",`La ciudad de Origen y Destino no pueden ser las mismas`,"warning");
+                return;
+            }
+
+            if (editFields.fechaSalida.getTime() >= editFields.fechaRegreso.getTime()) {
+                swal("Advertencia", "La fecha de salida debe ser antes de la fecha de regreso.", "warning");
+                return;
+            }
+
+            if(editFields.gastoEstimado<=0){
+                swal("Adevertencia",`El gasto estimado debe ser mayor a cero.`,"warning");
+                return;
+            }
             // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
             ///const response = await fetch(`${API_URL}/salidas?origenId=${ciudadOrigen}&ciudadDestino=${ciudadDestino}`, {
             const response = await fetch(`${API_URL}/salidas`, {
@@ -108,8 +123,9 @@ function CrearSalida({setReloadListado}){
             });
 
             if (response.ok) {
-                console.log(`Item creado  exitosamente ${editFields.descripcionSalidad}`);
+              //  console.log(`Item creado  exitosamente ${editFields.descripcionSalidad}`);
                 setReloadListado(true); // Set the reload trigger to true
+                swal("Exito",`Item creado  exitosamente ${editFields.descripcionSalidad}`,"success");
          //       fetchData();
             } else {
                 console.error('Error al editar el item');

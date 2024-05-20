@@ -140,7 +140,7 @@ export default function App() {
   ) : (
       <ThemeProvider theme={theme}>
           <CssBaseline />
-          {layout === "dashboard" && (
+          {layout === "authentication/sign-in" && (
               <>
                   <Sidenav
                       color={sidenavColor}
@@ -159,7 +159,7 @@ export default function App() {
           <Routes>
               {getRoutes(routes)}
 
-              <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+              <Route path="*" element={<Navigate to="/authentication/sign-in" />}  key={"sign-in"}/>
           </Routes>
       </ThemeProvider>
   );

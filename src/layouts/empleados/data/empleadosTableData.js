@@ -116,8 +116,8 @@ function useEmpleadosData() {
   const handleConfirmEdit = async (id) => {
 
     try {
-            const updateEditFields=editFields;
-            console.log(updateEditFields);
+       const updateEditFields=editFields;
+        console.log(updateEditFields);
       // Realiza la lógica para guardar la edición, por ejemplo, enviar una solicitud PUT al backend
       const response = await fetch(`${API_URL}/empleados/${id.idEmpleado}`, {
         method: 'PUT',
@@ -519,7 +519,7 @@ function useEmpleadosData() {
             disabled={departamentos.length === 0}
         >
           {departamentos.map((departamento) => (
-              <MenuItem key={departamento.idDepartamento} value={departamento.idDepartamento} selected={editFields.departamento === departamento.idDepartamento}>
+              <MenuItem key={departamento} value={departamento} selected={editFields.departamento === departamento.idDepartamento}>
                 {departamento.nombreDepartamento}
               </MenuItem>
           ))}
@@ -678,7 +678,7 @@ function useEmpleadosData() {
             disabled={departamentos.length === 0}
         >
           {departamentos.map((departamento) => (
-              <MenuItem key={departamento.idDepartamento} value={departamento.idDepartamento} selected={editFields.departamento === departamento.idDepartamento}>
+              <MenuItem key={departamento} value={departamento} selected={editFields.departamento === departamento.idDepartamento}>
                 {departamento.nombreDepartamento}
               </MenuItem>
           ))}

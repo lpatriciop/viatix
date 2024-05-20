@@ -67,7 +67,9 @@ function useSalidasData(reload) {
       //  console.error('Error al eliminar item');
       }
     } catch (error) {
-      console.error('Error al procesar la solicitud de eliminación:', error);
+      swal("Error","Error al procesar la solicitud de eliminación. \n Revise si la salida tiene empleados asignados.","error")
+    //  console.log(error);
+      //console.error('Error al procesar la solicitud de eliminación:', error);
     } finally {
       setDeleteItemId(null);
       setDeleteDialogOpen(false);
@@ -135,7 +137,6 @@ function useSalidasData(reload) {
   const handleCancelAsignar = () => {
     setEditDialogoAsignar(false);
   };
-
 
   const [empleados, setEmpleados] = useState([]);
   const [empleado, setEmpleado] = useState([]);

@@ -41,6 +41,7 @@ import {navbarRow} from "../../Navbars/DashboardNavbar/styles";
 import SoftButton from "../../../components/SoftButton";
 import IconButton from "@mui/material/IconButton";
 import ExcelExportButton from "../Excel";
+import PDFExportButton from "../PDF";
 
 function Table({ columns, rows }) {
   //Busqueda:
@@ -176,8 +177,11 @@ function Table({ columns, rows }) {
                           onChange={(e) => setSearchValue(e.target.value)}
                       />
                   </SoftBox>
-                  <SoftBox pr={0.5} width="50%" >
+                  <SoftBox pr={0.5} width="25%" >
                       <ExcelExportButton data={rows}/>
+                  </SoftBox>
+                  <SoftBox pr={0.5} width="25%" >
+                      <PDFExportButton columns={columns} rows={rows}/>
                   </SoftBox>
               </SoftBox>
             <MuiTable>
