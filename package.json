@@ -1,9 +1,9 @@
 {
-  "name": "Sistema de Control de Viaticos",
+  "name": "Sistema de Control de Viaticos y Visitas",
   "version": "0.0.1",
   "author": "GESINSOFT",
   "license": "<https://www.gesinsoft.com>",
-  "description": "Sistema de Control de Viaticos para comisiones y viajes",
+  "description": "Sistema de Control de Viaticos y Visitas Comerciales.",
   "bugs": {
     "url": "#"
   },
