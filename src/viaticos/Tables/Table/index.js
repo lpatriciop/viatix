@@ -181,7 +181,7 @@ function Table({ columns, rows }) {
                       <ExcelExportButton data={rows}/>
                   </SoftBox>
                   <SoftBox pr={0.5} width="25%" >
-                      <PDFExportButton columns={columns} rows={rows}/>
+                      {/*<PDFExportButton columns={columns} rows={rows}/>*/}
                   </SoftBox>
               </SoftBox>
             <MuiTable>

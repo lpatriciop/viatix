@@ -71,7 +71,7 @@ function Footer() {
         </Grid>
         <Grid item xs={12} lg={8} sx={{ textAlign: "center" }}>
           <SoftTypography variant="body2" color="secondary">
-            Copyright &copy; 2023 GESINSOFT.
+            Copyright &copy; 2024 ECUAMINERALES - TECNOLOGÍA E INNOVACIÓN.
           </SoftTypography>
         </Grid>
       </Grid>

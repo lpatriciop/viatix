@@ -25,7 +25,7 @@ import SoftButton from "../../components/SoftButton";
 import useSalidasData from "./data/salidasTableData";
 import PropTypes from "prop-types";
 import {parseISO} from "date-fns";
-
+import swal from 'sweetalert';
 function CrearSalida({setReloadListado}){
 
     const endpoint = API_URL + "/ciudades";
@@ -82,6 +82,7 @@ function CrearSalida({setReloadListado}){
                 editFields.ciudadOrigen.nombreCiudad===undefined ||
                 editFields.ciudadDestino.nombreCiudad===undefined
             ) {
+                //swal();
                 swal("Adevertencia",`Por favor, complete todos los campos son obligatorios.`,"warning");
                 return;
             }
@@ -223,7 +224,7 @@ function CrearSalida({setReloadListado}){
                         onChange={(newValue) => {
                             setEditFields({...editFields,fechaSalida:newValue});
                         }}
-                        // renderInput={(params) => <TextField {...params} />}
+                         renderInput={(params) => <TextField {...params} />}
 
                         fullWidth
                     />
@@ -237,7 +238,7 @@ function CrearSalida({setReloadListado}){
                         onChange={(newValue) => {
                             setEditFields({...editFields,fechaRegreso:newValue });
                         }}
-                        // renderInput={(params) => <TextField {...params} />}
+                         renderInput={(params) => <TextField {...params} />}
                         fullWidth
                     />
 

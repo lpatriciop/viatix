@@ -58,26 +58,26 @@ function Header({idEmpleado}) {
         }
     };
     const [empleado, setEmpleado] = useState([]);
-    const SumarMonto=async ()=>{
-        try {
-            const response = await fetch(`${API_URL}/viaticos/sumarMontos/${idSalida}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setGastoReal(data);
-
-            } else {
-                console.error('Error fetching data');
-            }
-        }catch (error){
-            console.error('Error fetching data:', error);
-        }
-    };
+    // const SumarMonto=async ()=>{
+    //     try {
+    //         const response = await fetch(`${API_URL}/viaticos/sumarMontos/${idSalida}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         });
+    //
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setGastoReal(data);
+    //
+    //         } else {
+    //             console.error('Error fetching data');
+    //         }
+    //     }catch (error){
+    //         console.error('Error fetching data:', error);
+    //     }
+    // };
     const [gastoReal, setGastoReal] = useState([]);
     const [diferencia, setDiferencia] = useState();
     useEffect(()=>{

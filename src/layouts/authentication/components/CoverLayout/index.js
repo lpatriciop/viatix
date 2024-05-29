@@ -22,8 +22,8 @@ function CoverLayout({ color, header, title, description, image, top, children }
       <DefaultNavbar
         action={{
             type: "external",
-            route: "https://www.gesinsoft.com",
-            label: "imevi",
+            route: "https://www.ecuamineralesgb.com",
+            label: "ECUAMINERALES",
           color: "light",
         }}
       />

@@ -115,7 +115,7 @@ export default function App() {
                   <Sidenav
                       color={sidenavColor}
                       brand={brand}
-                      brandName="Viáticos Imevi"
+                      brandName="Viáticos & Rutas"
                       routes={routes}
 
                       onMouseEnter={handleOnMouseEnter}
@@ -145,7 +145,7 @@ export default function App() {
                   <Sidenav
                       color={sidenavColor}
                       brand={brand}
-                      brandName="Viáticos Imevi"
+                      brandName="Viáticos & Rutas"
                       routes={routes}
 
                       onMouseEnter={handleOnMouseEnter}

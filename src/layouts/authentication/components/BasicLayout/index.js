@@ -23,7 +23,7 @@ function BasicLayout({ title, description, image, children }) {
         action={{
           type: "external",
           route: "https://www.gesinsoft.com",
-          label: "imevi",
+          label: "ECUAMINERALES",
         }}
         transparent
         light

@@ -1,7 +1,7 @@
 import React, { useState,useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
-
+import { Select, MenuItem } from "@mui/material";
 import {
     Table as MuiTable,
     TableBody,
@@ -11,7 +11,7 @@ import {
     IconButton, TablePagination
 } from "@mui/material";
 import {ExpandMore, ExpandLess, Web, TravelExplore, Map} from "@mui/icons-material";
-
+import swal from "sweetalert";
 import SoftBox from "components/SoftBox";
 import SoftAvatar from "components/SoftAvatar";
 import SoftTypography from "components/SoftTypography";
@@ -21,9 +21,7 @@ import borders from "assets/theme/base/borders";
 import {API_URL} from "../../../config";
 import SoftButton from "../../../components/SoftButton";
 const token = localStorage.getItem("token");
-import { Select, MenuItem } from "@mui/material";
-import swal from "sweetalert";
-import LoadingOverlay from 'react-loading-overlay-ts';
+
 function Table2({ columns, rows }) {
     const [dataLoaded, setDataLoaded] = useState(false);
     //paginacion>

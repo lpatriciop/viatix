@@ -92,7 +92,7 @@ function useDetalleData({idEmpleado}) {
 
 
   const handleNew = (item) => {
-    setNewItemId(item);
+   // setNewItemId(item);
     setEditFields({
       nombre: "",
       username: "",
@@ -102,7 +102,7 @@ function useDetalleData({idEmpleado}) {
       password:"",
       dni:"",
     })
-    setNewDialogOpen(true);
+  //  setNewDialogOpen(true);
   };
   const fetchData= async ()=> {
     const endpoint = `${API_URL}/empleadoSalidas/empleado/todas/${idEmpleado}`;

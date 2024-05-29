@@ -24,7 +24,7 @@ import SoftButton from "../../../components/SoftButton";
 import {IconButton, InputLabel, MenuItem, TextField} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Alert from '@mui/material/Alert';
-import Button from "@mui/material/Button";
+import swal from 'sweetalert';
 
 
 function useSalidasData(reload) {
@@ -158,7 +158,7 @@ function useSalidasData(reload) {
       estado: item.estado,
     });
 
-    setEditDialogOpen(true);
+    //setEditDialogOpen(true);
   };
   const handleClickAsignar=(e,item)=>{
     e.preventDefault();

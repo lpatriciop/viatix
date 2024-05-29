@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
-
+import swal from 'sweetalert';
 // Soft UI Dashboard React examples
 import DashboardNavbar from "viaticos/Navbars/DashboardNavbar";
 
@@ -17,7 +17,7 @@ import DashboardNavbar from "viaticos/Navbars/DashboardNavbar";
 // Images
 import imagenSalidas from "assets/images/salidas.jpg";
 import curved0 from "assets/images/curved-images/curved-6.jpg";
-
+import LoadingOverlay from 'react-loading-overlay-ts';
 
 import PropTypes from 'prop-types';
 import {API_URL} from "../../../../config";
@@ -32,7 +32,7 @@ import SoftButton from "../../../../components/SoftButton";
 import Divider from "@mui/material/Divider";
 const token = localStorage.getItem("token");
 
-import LoadingOverlay from 'react-loading-overlay-ts';
+
 Header.propTypes = {
     idSalida: PropTypes.string.isRequired,
 };
