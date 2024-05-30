@@ -27,6 +27,7 @@ import Detalle from "./layouts/detalle";
 import {Category, ContactPage, Groups, Summarize} from "@mui/icons-material";
 import ReporteGastos from "./layouts/reportegastos";
 import Separator from "./layouts/authentication/components/Separator";
+import Rutas from "./layouts/rutas";
 
 
 const routes = [
@@ -37,6 +38,16 @@ const routes = [
     route: "/dashboard",
     icon: <Shop size="12px" />,
     component: <Dashboard />,
+    noCollapse: true,
+    isPrivate: true,
+  },
+  {
+    type: "collapse",
+    name: "Rutas",
+    key: "rutas",
+    route: "/rutas",
+    icon: <CreditCard size="12px" />,
+    component: <Rutas />,
     noCollapse: true,
     isPrivate: true,
   },
