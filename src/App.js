@@ -16,6 +16,7 @@ import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "contex
 import brand from "assets/images/logo-ct.png";
 import Detalle from "./layouts/detalle";
 import Gastos from "./layouts/gastos";
+import Detaruta from "./layouts/detaruta";
 
 
 export default function App() {
@@ -132,6 +133,7 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/authentication/sign-in" />} key={"sign-in"} />
                 <Route path="/detalle/:idSalida" element={<Detalle />} />
                 <Route path="/gastos/:idEmpleado" element={<Gastos />} />
+                <Route path="/detaruta/:idRuta" element={<Detaruta />} />
             </Routes>
           </ThemeProvider>
 

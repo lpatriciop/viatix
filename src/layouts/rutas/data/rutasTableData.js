@@ -159,7 +159,7 @@ function useRutasData(reload) {
       });
       if (response.ok) {
         const fetchedData = await response.json();
-        console.log(fetchedData);
+        //console.log(fetchedData);
         const dataWithActions = fetchedData.map(item => ({
           id: item.id,
           descripcion:item.descripcion,
@@ -183,7 +183,7 @@ function useRutasData(reload) {
                 ><PersonAdd color={item.estado?"primary":"light"} />
                 </IconButton>
                 <IconButton
-                    href={`#/detalle/${item.id}`}
+                    href={`#/detaruta/${item.id}`}
                     style={{marginRight: 8}}
                     size="small"
                    // onClick={(e) => handleClickDetalle(e,item)}
